@@ -1,25 +1,50 @@
 <head>
 	<title>TEST</title>
-	<link rel='stylesheet' type="text/css" href="./views/index.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<%- include ('./partials/head.ejs')%>
 </head>
 <body>
 
-	<header>
-		<h1><%= date%></h1><nav>
-			<ul>
-				<li class='navi'><div class='centering'>TEST1</div></li><li class='navi'><div class='centering'>TEST2</div></li><li class='navi'><div class='centering'>TEST3</div></li>
-			</ul>
-		</nav>
-	</header>
+	<%- include ('./partials/header.ejs') %>
+
+
 	<content>
-	<center>Testowanie pod bazy danych
-		<div class='obiekty'>
+	<center>Projekt Bazy Danych 2 - Aplikacja wspierająca zarządzenie inteligentym domem<br>
+		<% if(session.loggedin){ %>
+			<h3>Witaj <%=session.username%>! </h3>
+			<br>
+			<h2>Dostepne opcje:</h2><br>
 			<ul>
-				<% for(let i=0;i<lista.length;i+=6){ const j=i;%>
-				<li class='dupa'><%=lista[j]%> - <%=lista[j+4]%> w <%=lista[j+1]%>, zuzywa <%=lista[j+2]%> W, status wlaczenia <%=lista[j+3]%>, adres IP <%=lista[j+5]%> </li>
-				<%};%>
+				<li>
+					Lista urzadzen
+				</li>
+				<li>
+					Historia pracy urzadzen
+				</li>
+				<li>
+					harmonogram pracy urzadzen
+				</li>
+				<li>
+					Skrypty uzytkownika
+				</li>
+				<li>
+					Grupy urzadzen
+				</li>
+				<li>
+					Status podlaczonych urzadzen
+				</li>
+				<li>
+					Zmiana hasla uzytkownika
+				</li>
+				<% if(session.userPrivilege>3){%>
+					<li>
+						Lista uzytkownikow
+					</li>
+					<li>
+						Lista zadan
+					</li>
+				<%}%>
 			</ul>
+			<% }%>
 		</div>
 		</center>
 	</content>

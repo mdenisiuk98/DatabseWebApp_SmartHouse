@@ -1,33 +1,20 @@
 var express = require('express');
 var app = express();
 var mysql = require('mysql2');
+var session = require('express-session');
+var bodyParser = require('body-parser');
 app.use(express.static('./'));
 app.set('view-engine','ejs');
+var config = require('./config.js');
 
-var db=mysql.createPool({
-  host: 'localhost',
-  user: 'mati',
-  password: 'zxc',
-  database: 'smart_house',
-    typeCast: function castField( field, useDefaultTypeCasting ) {
-
-        // We only want to cast bit fields that have a single-bit in them. If the field
-        // has more than one bit, then we cannot assume it is supposed to be a Boolean.
-        if ( ( field.type === "BIT" ) && ( field.length === 1 ) ) {
-
-            var bytes = field.buffer();
-
-            // A Buffer in Node represents a collection of 8-bit unsigned integers.
-            // Therefore, our single "bit field" comes back as the bits '0000 0001',
-            // which is equivalent to the number 1.
-            return( bytes[ 0 ] === 1 );
-
-        }
-
-        return( useDefaultTypeCasting() );
-
-}
-});
+var db=mysql.createPool(config.dbSettings);
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
 
 
 async function executeQuery(query){
@@ -41,22 +28,52 @@ async function executeQuery(query){
 }
 
  app.get('/', async function(req, res) {
-  let lista=[];
-    const temp= await executeQuery('SELECT * FROM Device_Detailed');
-    for(let i=0;i<temp.length;i++){
-      lista.push(temp[i].Device_Name);
-        lista.push(temp[i].Room_Name);
-        lista.push(temp[i].Power_Consumption);
-        lista.push(temp[i].Status_ON_OFF);
-        lista.push(temp[i].Type_Name);
-        lista.push(temp[i].IP_Address);
-    }
-	let date = new Date();
+  let date = new Date();
+  req.session.failedLogin=false;
+   res.render('index.ejs', {date : date,session : req.session});
+});
 
-	console.log('Request indexu - ' + date +'Obecnie aktywnych ' + (db._allConnections.length ) + 'polaczen.\n');
-   res.render('index.ejs', {lista : lista,date : date});
+app.get('/login',async function(req,res){
+
+  let date = new Date();
+    if(req.session.loggedin){
+      res.redirect('/');
+    }
+    else{
+      res.render('login.ejs', {date: date,session : req.session});
+    }
+});
+
+
+app.get('/logout',function(req,res){
+  req.session.loggedin=false;
+  req.session.username='';
+  res.redirect('/');
+});
+
+ app.post('/auth', async function(req, res) {
+	var username = req.body.login;
+	var password = req.body.password;
+	if (username && password) {
+    const credentials = await executeQuery('SELECT User_Name,Password,Authorization_Level FROM User WHERE Password = "' + password + '" AND User_Name = "' + username + '";')
+			if (credentials.length > 0) {
+        req.session.failedLogin=false;
+				req.session.loggedin = true;
+        req.session.username = username;
+        req.session.userPrivilege = credentials[0].Authorization_Level;
+				res.redirect('/');
+			} else {
+        req.session.failedLogin=true;
+        res.redirect('/login')
+			}	
+			res.end();
+	} else {
+    req.session.failedLogin=true;
+		res.redirect('/login')
+		res.end();
+	}
 });
 
 
 app.listen(3000, "127.0.0.1");
-console.log('Server running at http://127.0.0.1:3000/');``
+console.log('Server running at http://127.0.0.1:3000/');

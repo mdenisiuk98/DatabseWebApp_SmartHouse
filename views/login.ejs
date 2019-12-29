@@ -1,0 +1,23 @@
+<head>
+	<title>LOGOWANIE</title>
+    <%- include ('./partials/head.ejs')%>
+    <link rel='stylesheet' type="text/css" href="./views/partials/login.css">
+</head>
+<body>
+
+	<%- include ('./partials/header.ejs') %>
+
+
+	<content>
+        <form class='loginForm' action='auth' method='POST'>
+            Login<br> <input type='text' name='login'><br>
+            Haslo<br> <input type='password' name='password'><br>
+            <center class ='loginBtn'>
+                <input type='submit' value='Zaloguj'>
+            </center>
+        </form>
+       <%if(session.failedLogin){%>
+        <center><h2 style='color: red;'>NIEUDANE LOGOWANIE</h2></center>
+    <%}%>
+	</content>
+</body>

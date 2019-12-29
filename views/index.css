@@ -30,6 +30,7 @@ body{
 
 }
 header{
+	position: fixed;
 	left:0;
 	top:0;
 	margin:0;
@@ -37,14 +38,18 @@ header{
 	background: cyan;
 	height: 10%;
 	width:100%;
+	z-index: 3;
 
 }
 content{
 	display: block;
-	height:300%;
+	height: auto;
+	position: absolute;
+	top: 10%;
+	width:100%;
 }
 nav{
-	postion: relative;
+
 vertical-align: top;
   left:20%;
 	display: inline-block;
@@ -76,9 +81,9 @@ width:100%;
 .navi{
 		position:relative;
 	top:0;
-	height:100%;
+	height:106%;
 	line-height: 100%;
-	font-size:4.5vmin;
+	font-size:3.2vmin;
 	width:10%;
 
 	
@@ -90,28 +95,16 @@ width:100%;
 	background: red;
   justify-self: right;
 	text-align: center;
-	
+	overflow: hidden;
 }
 
-.obiekty{
-	display:block;
-	height:300px;
-	width:max-content;
-	list-style: asterisks;
-	background: black;
-	color:white;
-}
-
-
-.dupa:hover{
-	color:pink;
-}
-
-.dupa:active{
-	color:blue;
-}
 
 .centering{
 	height:auto;
-	margin-top: 2.25vmin;
+	vertical-align: middle;
+}
+
+.centering a{
+	color: white;
+	text-decoration: none;
 }
