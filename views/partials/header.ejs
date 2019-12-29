@@ -1,17 +1,20 @@
 <header>
-    <h1><%= date%></h1><nav>
+    <h1><%= new Date().toLocaleString("pl-PL")-%>
+        <% if(session.loggedin){%><br><br>Zalogowany jako <%= session.username -%>
+        <% }-%>
+    </h1><nav>
         <ul>
             <li class='navi'><div class='centering'><a href='../'>Strona Glowna</a></div></li>
             <li class='navi'><div class='centering'>TEST2</div></li>
             <li class='navi'><div class='centering'>
-                <% if(!session.loggedin){%>
+                <% if(!session.loggedin){-%>
                     <a href='../login'>Zaloguj</a>
                 <%}
                 else{%>
                     <a href='../logout'>Wyloguj</a>
-                <%}%>
-             </div></li>
-
+                <%}-%>
+                </div>
+            </li>
         </ul>
     </nav>
 </header>

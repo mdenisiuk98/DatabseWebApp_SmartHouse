@@ -8,14 +8,14 @@
 
 
 	<content>
-	<center>Projekt Bazy Danych 2 - Aplikacja wspierająca zarządzenie inteligentym domem<br>
+	<center><h3>Projekt Bazy Danych 2 - Aplikacja wspierająca zarządzenie inteligentym domem</h3><br>
 		<% if(session.loggedin){ %>
 			<h3>Witaj <%=session.username%>! </h3>
 			<br>
 			<h2>Dostepne opcje:</h2><br>
 			<ul>
 				<li>
-					Lista urzadzen
+					<a href=../deviceList>Lista urzadzen</a>
 				</li>
 				<li>
 					Historia pracy urzadzen
@@ -44,8 +44,10 @@
 					</li>
 				<%}%>
 			</ul>
-			<% }%>
+		<% }else{%>
+			Prosimy o <a href='./login'>zalogowanie</a> sie do systemu!
+		<%}%>
 		</div>
-		</center>
+	</center>
 	</content>
 </body>

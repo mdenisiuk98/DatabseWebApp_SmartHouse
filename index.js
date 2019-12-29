@@ -3,7 +3,8 @@ var app = express();
 var mysql = require('mysql2');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-app.use(express.static('./'));
+app.use(express.static('./static/'));
+
 app.set('view-engine','ejs');
 var config = require('./config.js');
 
@@ -74,6 +75,11 @@ app.get('/logout',function(req,res){
 	}
 });
 
+app.get('/deviceList',async function(req,res){
+  const devices = await executeQuery('SELECT * FROM Device_Detailed');
+  let date = new Date();
+  res.render('deviceList.ejs',{devices: devices, session: req.session,date: date});
+});
 
 app.listen(3000, "127.0.0.1");
 console.log('Server running at http://127.0.0.1:3000/');

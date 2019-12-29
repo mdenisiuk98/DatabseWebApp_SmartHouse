@@ -1,0 +1,31 @@
+<head>
+        <title>Lista urzadzen</title>
+        <%- include ('./partials/head.ejs')%>
+        <link rel='stylesheet' type="text/css" href="./deviceList.css">
+</head>
+<body>
+    
+    <%- include ('./partials/header.ejs') %>
+    
+    
+    <content>
+        <ul class=devices>
+            <%devices.forEach(element => {%>
+                <li>
+                    <div class='deviceContainer'>
+                        <div class='deviceName'>
+                            <%= element.Device_Name %><br>
+                        </div>
+                        <%= element.Room_Name %><br>
+                        <%= element.Power_Consumption %><br>
+                        <%= element.Status_ON_OFF %><br>
+                        <%= element.IP_Address %><br>
+                        <%= element.Type_Name %><br>
+                    </div>
+                </li>
+            <%})%>
+        </ul>
+       
+
+    </content>
+</body>
