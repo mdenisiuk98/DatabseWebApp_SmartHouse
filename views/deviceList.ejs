@@ -2,10 +2,11 @@
         <title>Lista urzadzen</title>
         <%- include ('./partials/head.ejs')%>
         <link rel='stylesheet' type="text/css" href="./deviceList.css">
+        <script type="text/javascript" src="./deviceListScripts.js"></script>
 </head>
 <body>
     
-    <%- include ('./partials/header.ejs') %>
+    <%- include ('./partials/header.ejs')%>
     
     
     <content>
@@ -14,13 +15,26 @@
                 <li>
                     <div class='deviceContainer'>
                         <div class='deviceName'>
-                            <%= element.Device_Name %><br>
+                            <%= element.Device_Name %>
+                                <%if(session.userPrivilege>5 && session.loggedin){%>
+                                    <button class='deleteButton'>
+                                            Usun
+                                        </button>
+                                    <button class='editButton' onclick='editDevice(<%= JSON.stringify(element)%>,<%= JSON.stringify(rooms)%>,<%=JSON.stringify(types)%>)'>
+                                        Edytuj
+                                    </button>
+                                <%}%>
                         </div>
-                        <%= element.Room_Name %><br>
-                        <%= element.Power_Consumption %><br>
-                        <%= element.Status_ON_OFF %><br>
-                        <%= element.IP_Address %><br>
-                        <%= element.Type_Name %><br>
+                        <div class='deviceDetails' id="<%= element.Device_Name %>">
+                                Typ urzadzenia: <%= element.Type_Name %><br>
+                                W pokoju: <%= element.Room_Name %><br>
+                                Zuzycie pradu: <%= element.Power_Consumption %> W<br>
+                                Obecnie aktywny: <%= element.Status_ON_OFF %><br>
+                                Wysyla powiadomienia: <%= element.Notifications_Enabled %><br>
+                                Adres IP: <%= element.IP_Address %><br>
+                                Wymagane uprawnienia: <%=element.Authorization_Level%><br>
+                                W grupach: <%= element.In_Groups%><br>
+                            </div>
                     </div>
                 </li>
             <%})%>

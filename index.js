@@ -49,6 +49,7 @@ app.get('/login',async function(req,res){
 app.get('/logout',function(req,res){
   req.session.loggedin=false;
   req.session.username='';
+  req.session.userPrivilege = 0;
   res.redirect('/');
 });
 
@@ -76,10 +77,53 @@ app.get('/logout',function(req,res){
 });
 
 app.get('/deviceList',async function(req,res){
+
   const devices = await executeQuery('SELECT * FROM Device_Detailed');
   let date = new Date();
-  res.render('deviceList.ejs',{devices: devices, session: req.session,date: date});
+  if(req.session.userPrivilege>5){
+    const rooms= await executeQuery('SELECT Room_ID,Room_Name FROM Room');
+    const types = await executeQuery('SELECT Type_Name,Type_ID FROM Type');
+
+    res.render('deviceList.ejs',{devices: devices, session: req.session,date: date,rooms: rooms,types: types});
+  }
+  else{
+    res.render('deviceList.ejs',{devices: devices, session: req.session,date: date});
+  }
 });
+
+app.post('/deviceList', async function(req,res){
+
+  if(!req.body.Notifications_Enabled){
+    req.body.Notifications_Enabled=false;
+  }
+  if(req.body.Notifications_Enabled=="true"){
+    req.body.Notifications_Enabled = true;
+  }
+    console.log(req.body.Notifications_Enabled)
+
+
+  let updateQuery = 'UPDATE Device SET' +
+  ' Device_Name = \'' + req.body.Device_Name +
+  '\', Room_ID = ' + req.body.Room_ID +
+  ', Power_Consumption = ' + req.body.Power_Consumption +
+  ', Authorization_Level = ' + req.body.Authorization_Level +
+  ', Notifications_Enabled = ' + req.body.Notifications_Enabled +
+  ', IP_Address = \'' + req.body.IP_Address +
+  '\', Type_ID = ' + req.body.Type_ID +
+  ' WHERE Device_Name = \'' + req.body.Device_Name_OLD + "\';";
+
+
+console.log(updateQuery);
+
+await executeQuery(updateQuery);
+
+
+  res.redirect('/deviceList');
+})
 
 app.listen(3000, "127.0.0.1");
 console.log('Server running at http://127.0.0.1:3000/');
+
+
+
+

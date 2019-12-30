@@ -29,3 +29,18 @@
     font-size: calc(10px + 1.4vmin);
 }
 
+.editButton{
+    box-sizing: border-box;
+    font-size: calc(7px + 1.4vmin);
+    display: inline-block;
+    background: wheat;
+    float: right;
+}
+
+.deleteButton{
+    box-sizing: border-box;
+    font-size: calc(7px + 1.4vmin);
+    display: inline-block;
+    background: red;
+    float: right;
+}
