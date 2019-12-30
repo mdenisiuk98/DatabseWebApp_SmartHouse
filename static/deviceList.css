@@ -19,19 +19,19 @@
     
    height: 90%;
     width:90%;
-    font-size: calc(10px + 1vmin);
+    font-size: calc(8px + 1vmin);
 }
 
 .deviceName{
     text-align: center;
     background: burlywood;
     border-bottom: 4px solid black;
-    font-size: calc(10px + 1.4vmin);
+    font-size: calc(9px + 1.4vmin);
 }
 
 .editButton{
     box-sizing: border-box;
-    font-size: calc(7px + 1.4vmin);
+    font-size: calc(6px + 1.4vmin);
     display: inline-block;
     background: wheat;
     float: right;
@@ -39,8 +39,45 @@
 
 .deleteButton{
     box-sizing: border-box;
-    font-size: calc(7px + 1.4vmin);
+    font-size: calc(6px + 1.4vmin);
     display: inline-block;
     background: red;
     float: right;
+}
+
+
+.categorySpan{
+
+    text-align: center;
+    display: inline-block;
+    width: 50%;
+    background: rgba(224, 224, 224, 0.5);
+    color: #505050;
+}
+
+.valueSpan{
+    text-align: center;
+    width: 50%;
+    float: right;
+    background: rgba(255, 255, 255, 0.5);
+}
+form{
+    text-align: center;
+}
+
+input, select{
+    position: relative;
+    width:40%;
+    margin-left: 10%;
+}
+
+form center{
+    margin-top: 3%;
+}
+
+form center input{
+    margin: 0;
+    width:auto;
+    box-sizing: border-box;
+    margin-right: 1%;
 }

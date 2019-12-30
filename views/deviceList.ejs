@@ -26,14 +26,14 @@
                                 <%}%>
                         </div>
                         <div class='deviceDetails' id="<%= element.Device_Name %>">
-                                Typ urzadzenia: <%= element.Type_Name %><br>
-                                W pokoju: <%= element.Room_Name %><br>
-                                Zuzycie pradu: <%= element.Power_Consumption %> W<br>
-                                Obecnie aktywny: <%= element.Status_ON_OFF %><br>
-                                Wysyla powiadomienia: <%= element.Notifications_Enabled %><br>
-                                Adres IP: <%= element.IP_Address %><br>
-                                Wymagane uprawnienia: <%=element.Authorization_Level%><br>
-                                W grupach: <%= element.In_Groups%><br>
+                               <span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span><br>
+                               <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span><br>
+                                <span class='categorySpan'>Zuzycie pradu:</span>  <span class='valueSpan'><%= element.Power_Consumption %> W</span><br>
+                                <span class='categorySpan'>Obecnie aktywny:</span>  <span class='valueSpan'><%= element.Status_ON_OFF %></span><br>
+                                <span class='categorySpan'>Wysyla powiadomienia:</span>  <span class='valueSpan'><%= element.Notifications_Enabled %></span><br>
+                                <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span><br>
+                                <span class='categorySpan'>Wymagane uprawnienia:</span>  <span class='valueSpan'><%=element.Authorization_Level%></span><br>
+                                <span class='categorySpan'>W grupach:</span>  <span class='valueSpan'><%= element.In_Groups%></span><br>
                             </div>
                     </div>
                 </li>
