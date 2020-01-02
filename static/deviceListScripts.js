@@ -85,3 +85,25 @@ async function submitDevice(user,ip,formID){
     else{
     }
 }
+
+
+async function getGroups(name){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST",'/deviceGroups',true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send('Device_Name=' + name);
+    xhr.onreadystatechange = function() { // Call a function when the state changes.
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var display=document.getElementById(name+'_groups')
+            var newList = "<ul class='groupList'>";
+            oldInner = display.innerHTML
+            var arrayGroups = JSON.parse(xhr.responseText)
+            arrayGroups.forEach(element => {
+                newList+=("<li>" + element.Group_Name + "</li>")
+            });
+            newList +="</ul>"
+            display.innerHTML = newList
+        }
+    }
+}

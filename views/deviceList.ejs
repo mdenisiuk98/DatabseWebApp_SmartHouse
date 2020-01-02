@@ -27,14 +27,14 @@
                                 <%}%>
                         </div>
                         <div class='deviceDetails' id="<%= element.Device_Name %>">
-                               <span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span><br>
-                               <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span><br>
-                                <span class='categorySpan'>Zuzycie pradu:</span>  <span class='valueSpan'><%= element.Power_Consumption %> W</span><br>
-                                <span class='categorySpan'>Obecnie aktywny:</span>  <span class='valueSpan'><%= element.Status_ON_OFF %></span><br>
-                                <span class='categorySpan'>Wysyla powiadomienia:</span>  <span class='valueSpan'><%= element.Notifications_Enabled %></span><br>
-                                <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span><br>
-                                <span class='categorySpan'>Wymagane uprawnienia:</span>  <span class='valueSpan'><%=element.Authorization_Level%></span><br>
-                                <span class='categorySpan'>W grupach:</span>  <span class='valueSpan'><%= element.In_Groups%></span><br>
+                             <span class='row'><span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span></span>
+                             <span class='row'> <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span></span>
+                             <span class='row'> <span class='categorySpan'>Zuzycie pradu:</span>  <span class='valueSpan'><%= element.Power_Consumption %> W</span></span>
+                             <span class='row'> <span class='categorySpan'>Obecnie aktywny:</span>  <span class='valueSpan'><%= element.Status_ON_OFF %></span></span>
+                             <span class='row'>  <span class='categorySpan'>Wysyla powiadomienia:</span>  <span class='valueSpan'><%= element.Notifications_Enabled %></span></span>
+                             <span class='row'>  <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span></span>
+                             <span class='row'>  <span class='categorySpan'>Wymagane uprawnienia:</span>  <span class='valueSpan'><%=element.Authorization_Level%></span></span>
+                             <span class='row'>  <span class='categorySpan'>W grupach:</span>  <span class='valueSpan' id="<%= element.Device_Name%>_groups"><%= element.In_Groups%><br><button onclick="getGroups('<%=element.Device_Name%>')">Pokaz</button></span></span>
                         </div>
                     </div>
                 </li>

@@ -166,7 +166,15 @@ app.post('/revalidateAdmin', async function(req,res){
   res.end();
 })
 
+app.post('/deviceGroups',async function(req,res){
 
+    var device = req.body.Device_Name
+    console.log(device)
+    let getQuery = "SELECT Group_Name FROM Device_Groups WHERE Device_Name = \'" + device + "\';"
+    console.log(getQuery)
+    const groups = await executeQuery(getQuery)
+    res.send(groups)
+})
 
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);
 console.log('Server running at http://'+config.serverSettings.ipAddress+':'+config.serverSettings.port+'/');

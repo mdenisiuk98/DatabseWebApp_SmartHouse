@@ -85,3 +85,17 @@ form center input{
 .errorMsg{
     color: red;
 }
+
+.row{
+    display: block;
+    margin:0;
+    padding:0;
+}
+
+.deviceDetails{
+    height:100%;
+}
+
+.groupList li{
+    height:min-content;
+}
