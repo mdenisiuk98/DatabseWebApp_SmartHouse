@@ -81,3 +81,7 @@ form center input{
     box-sizing: border-box;
     margin-right: 1%;
 }
+
+.errorMsg{
+    color: red;
+}

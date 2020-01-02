@@ -42,3 +42,32 @@ function editDevice(element,rooms,types){
     }
 }
 
+function validateIP(input){
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(input))
+  {
+    return true;
+  }
+  else{
+     var errorField =  document.getElementsByClassName('errorMsg')[0]
+     errorField.innerHTML= "Podaj poprawny adres IP!<br>";
+      return false;
+  }
+}
+
+function clearError(){
+    var errorField =  document.getElementsByClassName('errorMsg')[0]
+    errorField.innerHTML = ''
+}
+
+function removeDevice(name){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST",'/removeDevice',true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send('Device_Name=' + name);
+    xhr.onreadystatechange = function() { // Call a function when the state changes.
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            location.reload();
+        }
+    }
+}

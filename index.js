@@ -19,12 +19,13 @@ app.use(bodyParser.json());
 
 
 async function executeQuery(query){
-    try{
-  let result = await db.promise().query(query);
-  return result[0];
+  try{
+    let result = await db.promise().query(query);
+    return result[0];
   }
   catch(err){
     console.log(err);
+    throw(err);
   }
 }
 
@@ -99,8 +100,6 @@ app.post('/deviceList', async function(req,res){
   if(req.body.Notifications_Enabled=="true"){
     req.body.Notifications_Enabled = true;
   }
-    console.log(req.body.Notifications_Enabled)
-
 
   let updateQuery = 'UPDATE Device SET' +
   ' Device_Name = \'' + req.body.Device_Name +
@@ -111,18 +110,43 @@ app.post('/deviceList', async function(req,res){
   ', IP_Address = \'' + req.body.IP_Address +
   '\', Type_ID = ' + req.body.Type_ID +
   ' WHERE Device_Name = \'' + req.body.Device_Name_OLD + "\';";
-
-
-console.log(updateQuery);
-
-await executeQuery(updateQuery);
-
+  await executeQuery(updateQuery);
 
   res.redirect('/deviceList');
 })
 
-app.listen(3000, "127.0.0.1");
-console.log('Server running at http://127.0.0.1:3000/');
+app.post('/addDevice' ,async function(req,res){
+
+  if(!req.body.Notifications_Enabled){
+    req.body.Notifications_Enabled=false;
+  }
+  if(req.body.Notifications_Enabled=="true"){
+    req.body.Notifications_Enabled = true;
+  }
+
+
+  let insertQuery = 'INSERT INTO Device (Device_Name,Room_ID,Power_Consumption,Authorization_Level,Notifications_Enabled,IP_Address,Type_ID)' +
+  '\nVALUES(\'' + req.body.Device_Name + '\', ' + req.body.Room_ID + ', ' + req.body.Power_Consumption + ', ' + req.body.Authorization_Level +
+  ', ' + req.body.Notifications_Enabled + ', \'' + req.body.IP_Address + '\', ' + req.body.Type_ID + ');';
+
+  try{
+  await executeQuery(insertQuery);
+  }
+  catch(err){
+    req.session.sqlError = err.code;
+  }
+  res.redirect('/deviceList');
+})
+
+app.post('/removeDevice',async function(req,res){
+  let removeQuery = 'DELETE FROM Device WHERE Device_Name = \'' + req.body.Device_Name + '\';'
+  await executeQuery(removeQuery);
+  res.end()
+})
+
+
+app.listen(config.serverSettings.port, config.serverSettings.ipAddress);
+console.log('Server running at http://'+config.serverSettings.ipAddress+':'+config.serverSettings.port+'/');
 
 
 

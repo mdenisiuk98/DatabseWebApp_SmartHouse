@@ -17,7 +17,7 @@
                         <div class='deviceName'>
                             <%= element.Device_Name %>
                                 <%if(session.userPrivilege>5 && session.loggedin){%>
-                                    <button class='deleteButton'>
+                                    <button class='deleteButton' onclick='removeDevice( <%=JSON.stringify(element.Device_Name)%>)'>
                                             Usun
                                         </button>
                                     <button class='editButton' onclick='editDevice(<%= JSON.stringify(element)%>,<%= JSON.stringify(rooms)%>,<%=JSON.stringify(types)%>)'>
@@ -34,12 +34,47 @@
                                 <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span><br>
                                 <span class='categorySpan'>Wymagane uprawnienia:</span>  <span class='valueSpan'><%=element.Authorization_Level%></span><br>
                                 <span class='categorySpan'>W grupach:</span>  <span class='valueSpan'><%= element.In_Groups%></span><br>
-                            </div>
+                        </div>
                     </div>
                 </li>
             <%})%>
+            <%if(session.userPrivilege>5 && session.loggedin){%>
+            <li>
+                <div class='deviceContainer'>
+                    <div class='deviceName'>
+                        DODAJ NOWE URZADZENIE
+                    </div>
+                    <form class='deviceEditor' action='addDevice' method='POST' onsubmit="return validateIP(IP_Address.value)" >
+                            <span class='errorMsg'>
+                                <%if(session.sqlError!='' && session.sqlError != null) {%>
+                                    <% if(session.sqlError=='ER_DUP_ENTRY'){ %>
+                                        BLAD: Duplikat nazwy lub adresu IP<br>
+                                    <% }else{ %>
+                                        BLAD: Wykryto niepoprawne dane<br>
+                                    <%}%>
+                                    <% session.sqlError = '' %>
+                                <%}%>
+                            </span>
+                        Nazwa:  <input type='text' name='Device_Name'> <br>
+                        Pokoj: <select name='Room_ID'>
+                            <%rooms.forEach(room =>{%>
+                                <option value= <%=room.Room_ID %>> <%=room.Room_Name%></option>
+                            <%})%>
+                        </select><br>
+                        Zuzycie pradu: <input type='number' name='Power_Consumption'><br>
+                        Wymagane uprawnienia: <input type ='number' name='Authorization_Level' min='0' max='10'><br>
+                        Powiadomienia: <input type='checkbox' name='Notifications_Enabled' value='true'><br>
+                        Adres IP: <input type='text' name='IP_Address'><br>
+                        Typ: <select name='Type_ID'>
+                                <%types.forEach(type =>{%>
+                                    <option value= <%=type.Type_ID %>> <%=type.Type_Name%></option>
+                                <%})%>
+                        </select><br>
+                        <center><input type='submit' value='Zapisz'><input type='reset' onclick="clearError()" value='Zresetuj'></center>
+                    </form>
+                </div>
+            </li>
+            <%}%>
         </ul>
-       
-
     </content>
 </body>
