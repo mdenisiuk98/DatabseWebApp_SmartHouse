@@ -95,15 +95,20 @@ async function getGroups(name){
     xhr.send('Device_Name=' + name);
     xhr.onreadystatechange = function() { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            var display=document.getElementById(name+'_groups')
-            var newList = "<ul class='groupList'>";
-            oldInner = display.innerHTML
+
             var arrayGroups = JSON.parse(xhr.responseText)
-            arrayGroups.forEach(element => {
-                newList+=("<li>" + element.Group_Name + "</li>")
-            });
-            newList +="</ul>"
-            display.innerHTML = newList
+            if(arrayGroups.length>0){
+
+                var display=document.getElementById(name+'_groups')
+                
+                var newList = "<ul class='groupList'>";
+                
+                arrayGroups.forEach(element => {
+                    newList+=("<li>" + element.Group_Name + "</li>")
+                });
+                newList +="</ul>"
+                display.innerHTML = newList
+            }
         }
     }
 }
