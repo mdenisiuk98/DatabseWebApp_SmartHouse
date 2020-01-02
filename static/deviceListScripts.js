@@ -1,5 +1,5 @@
-function editDevice(element,rooms,types){
-    
+
+function editDevice(element,rooms,types,user){
     var parent = document.getElementById(element.Device_Name);
     let checkMultiple = parent.innerHTML.includes('form');
     if(checkMultiple===false){
@@ -9,7 +9,7 @@ function editDevice(element,rooms,types){
             parent.innerHTML = oldForm;
         }
 
-        newForm = " <form class='deviceEditor' action='deviceList' method='POST' >\n Nazwa:  <input type='text' name='Device_Name' value='"+ element.Device_Name +
+        newForm = " <form class='deviceEditor' id='editor_"+element.Device_Name+"' action='deviceList' method='POST' >\n Nazwa:  <input type='text' name='Device_Name' value='"+ element.Device_Name +
         "'><br>Pokoj: <select name='Room_ID'>";
 
         rooms.forEach(room =>{
@@ -36,7 +36,7 @@ function editDevice(element,rooms,types){
             }
         })
         newForm+="</select><br><input type='hidden' name='Device_Name_OLD' value='" + element.Device_Name +
-        "'> <center><input type='submit' value='Zapisz'><button type='button' onclick='resetForm()'>Anuluj</button></center></form>";
+        "'> <center><button type='button' onclick=\"return(submitDevice('" + user +"',IP_Address.value,'editor_" + element.Device_Name+"'))\">Zapisz></button><button type='button' onclick='resetForm()'>Anuluj</button></center></form>";
         parent.innerHTML = newForm;
 
     }
@@ -59,15 +59,29 @@ function clearError(){
     errorField.innerHTML = ''
 }
 
-function removeDevice(name){
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST",'/removeDevice',true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send('Device_Name=' + name);
-    xhr.onreadystatechange = function() { // Call a function when the state changes.
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            location.reload();
+async function removeDevice(name,user){
+    var revalidate = await validateAdmin(user)
+    if(revalidate==true){
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST",'/removeDevice',true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send('Device_Name=' + name);
+        xhr.onreadystatechange = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                location.reload();
+            }
         }
+    }
+}
+
+async function submitDevice(user,ip,formID){
+    var admin= await validateAdmin(user)
+    var validIP = validateIP(ip)
+    if(admin==true&&validIP==true){
+        var form = document.getElementById(formID)
+        form.submit()
+    }
+    else{
     }
 }

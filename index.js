@@ -79,15 +79,15 @@ app.get('/logout',function(req,res){
 
 app.get('/deviceList',async function(req,res){
 
-  const devices = await executeQuery('SELECT * FROM Device_Detailed');
+  
   let date = new Date();
   if(req.session.userPrivilege>5){
-    const rooms= await executeQuery('SELECT Room_ID,Room_Name FROM Room');
-    const types = await executeQuery('SELECT Type_Name,Type_ID FROM Type');
-
-    res.render('deviceList.ejs',{devices: devices, session: req.session,date: date,rooms: rooms,types: types});
+    const dbData = await executeQuery('SELECT * FROM Device_Detailed; ' + 'SELECT Room_ID,Room_Name FROM Room; ' +
+    'SELECT Type_Name,Type_ID FROM Type;')
+    res.render('deviceList.ejs',{devices: dbData[0], session: req.session,date: date,rooms: dbData[1],types: dbData[2]});
   }
   else{
+    const devices = await executeQuery('SELECT * FROM Device_Detailed;');
     res.render('deviceList.ejs',{devices: devices, session: req.session,date: date});
   }
 });
@@ -143,6 +143,29 @@ app.post('/removeDevice',async function(req,res){
   await executeQuery(removeQuery);
   res.end()
 })
+
+app.post('/revalidateAdmin', async function(req,res){
+  var username = req.body.login;
+	var password = req.body.password;
+	if (username && password) {
+    try{
+    const credentials = await executeQuery('SELECT User_Name,Password,Authorization_Level FROM User WHERE Password = "' + password + '" AND User_Name = "' + username + '";')
+			if (credentials.length > 0) {
+        res.send('true')
+      }
+      else{
+        res.send('false')
+      }
+    }catch(err){
+      console.log(err)
+  }
+  }
+    else{
+      res.send('false')
+    }
+  res.end();
+})
+
 
 
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);

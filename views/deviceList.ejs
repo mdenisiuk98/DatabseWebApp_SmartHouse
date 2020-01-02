@@ -2,6 +2,7 @@
         <title>Lista urzadzen</title>
         <%- include ('./partials/head.ejs')%>
         <link rel='stylesheet' type="text/css" href="./deviceList.css">
+        <script type="text/javascript" src="./globalScripts.js"></script>
         <script type="text/javascript" src="./deviceListScripts.js"></script>
 </head>
 <body>
@@ -17,10 +18,10 @@
                         <div class='deviceName'>
                             <%= element.Device_Name %>
                                 <%if(session.userPrivilege>5 && session.loggedin){%>
-                                    <button class='deleteButton' onclick='removeDevice( <%=JSON.stringify(element.Device_Name)%>)'>
+                                    <button class='deleteButton' onclick='removeDevice( <%=JSON.stringify(element.Device_Name)%>,<%=JSON.stringify(session.username)%>)'>
                                             Usun
                                         </button>
-                                    <button class='editButton' onclick='editDevice(<%= JSON.stringify(element)%>,<%= JSON.stringify(rooms)%>,<%=JSON.stringify(types)%>)'>
+                                    <button class='editButton' onclick='editDevice(<%= JSON.stringify(element)%>,<%= JSON.stringify(rooms)%>,<%=JSON.stringify(types)%>,<%=JSON.stringify(session.username)%>)'>
                                         Edytuj
                                     </button>
                                 <%}%>
@@ -44,7 +45,7 @@
                     <div class='deviceName'>
                         DODAJ NOWE URZADZENIE
                     </div>
-                    <form class='deviceEditor' action='addDevice' method='POST' onsubmit="return validateIP(IP_Address.value)" >
+                    <form class='deviceEditor' id='newDevice' action='addDevice' method='POST'>
                             <span class='errorMsg'>
                                 <%if(session.sqlError!='' && session.sqlError != null) {%>
                                     <% if(session.sqlError=='ER_DUP_ENTRY'){ %>
@@ -70,7 +71,7 @@
                                     <option value= <%=type.Type_ID %>> <%=type.Type_Name%></option>
                                 <%})%>
                         </select><br>
-                        <center><input type='submit' value='Zapisz'><input type='reset' onclick="clearError()" value='Zresetuj'></center>
+                        <center><button type='button' onclick='submitDevice(<%=JSON.stringify(session.username)%>,IP_Address.value,"newDevice")'>Zapisz</button>><input type='reset' onclick="clearError()" value='Zresetuj'></center>
                     </form>
                 </div>
             </li>
