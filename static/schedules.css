@@ -1,0 +1,59 @@
+.time{
+    display: inline-block;
+    width: 320px;
+}
+
+.time input{
+    display: inline-block;
+    width: 17%;
+}
+
+form button{
+    display: inline-block;
+    height: 40px;
+    margin-top:5px;
+
+}
+.scheduleList{
+    margin:0;
+    padding:0;
+    text-align: center;
+}
+
+.scheduleList li{
+    display: inline-block;
+
+    width:95%;
+    height: 60px;
+    margin:0;
+    padding:0;
+    text-align: start;
+}
+
+.scheduleList li form{
+    border: 1px solid black;
+    padding:5px;
+}
+
+.scheduleElement{
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    padding:0;
+    margin:0;
+    border: 1px solid black;
+    display: inline-block;
+    height:100%;
+    width:14.175%;
+    line-height:100%;
+}
+
+.scheduleElement button{
+    display:inline-block;
+    position:relative;
+   height: 50%;
+   width: 40%;
+   margin-left: 5px;
+   margin-right: 5px;
+   top:25%;
+}

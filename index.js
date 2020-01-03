@@ -169,11 +169,45 @@ app.post('/revalidateAdmin', async function(req,res){
 app.post('/deviceGroups',async function(req,res){
 
     var device = req.body.Device_Name
-    console.log(device)
     let getQuery = "SELECT Group_Name FROM Device_Groups WHERE Device_Name = \'" + device + "\';"
-    console.log(getQuery)
     const groups = await executeQuery(getQuery)
     res.send(groups)
+})
+
+app.get('/schedules',async function(req,res){
+  let selectQuery='SELECT * FROM Weekly_Plan; SELECT * FROM Task; SELECT * FROM Custom_Script; SELECT Device_Name,Device_ID,Type_ID FROM Device;'
+  const results = await executeQuery(selectQuery)
+  let date=new Date()
+  res.render('schedules.ejs',{date: date,session: req.session,schedule: results[0],tasks: results[1],scripts: results[2],devices: results[3]})
+})
+
+app.post('/addScheduleItem', async function(req,res){
+  if(req.body.Was_Custom_Script=='true'){
+    req.body.Was_Custom_Script=true
+  }
+  else{
+    req.body.Was_Custom_Script=false
+  }
+  let insertQuery = 'INSERT INTO Schedule(Device_ID,Start_Time,End_Time,Day,Was_Custom_Script,'
+  let commonValue = ('VALUES('+ req.body.Device_ID +',\''+req.body.beginH+':'+req.body.beginM+':'+req.body.beginS+'\',\''+
+  req.body.endH+ ':' + req.body.endM + ':' + req.body.endS+'\','+req.body.Day + ',' +req.body.Was_Custom_Script + ',' +
+  req.body.Job +');')
+  
+  if( req.body.Was_Custom_Script==true){
+    insertQuery+='Script_ID)\n'
+  }
+  else{
+    insertQuery+='Task_ID)\n'
+  }
+  insertQuery+=commonValue
+  await executeQuery(insertQuery)
+  res.redirect('/schedules')
+})
+
+app.post('/removeScheduleItem', async function(req,res){
+  let removeQuery=('DELETE FROM Schedule WHERE Schedule_ID=' + req.body.Schedule_ID + ';')
+  await executeQuery(removeQuery)
+  res.redirect('/schedules')
 })
 
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);

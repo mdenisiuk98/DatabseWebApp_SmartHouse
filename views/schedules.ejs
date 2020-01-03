@@ -1,0 +1,77 @@
+<head>
+        <title>Harmonogram pracy urzadzen</title>
+        <%- include ('./partials/head.ejs')%>
+        <link rel='stylesheet' type="text/css" href="./schedules.css">
+        <script type='text/javascript' src='./scheduleScripts.js'></script>
+        
+</head>
+<body>
+    <%- include ('./partials/header.ejs')%>
+    <%var weekDays = ['PON','WT','SR','CZW','PT','SOB','NDZ']%>
+    <%var firstDeviceType = devices[0].Type_ID %>
+    <content>
+        <h2>TYGODNIOWY HARMONOGRAM PRACY URZADZEN</h2>
+        <ul class='scheduleList'>
+            <li>
+                    <div class='scheduleElement'>URZADZENIE</div><div class='scheduleElement'>Zadanie/Skrypt</div><div class='scheduleElement'>Rodzaj</div><div class='scheduleElement'>Dzien</div><div class='scheduleElement'>Godz. poczatku</div><div class='scheduleElement'>Godz. konca</div>
+            </li>
+        <% schedule.forEach(element => { %>
+            <li>
+               <div class='scheduleElement'><%=element.Device_Name%></div><div class='scheduleElement'>
+                <% if(element.Was_Custom_Script==false){-%>
+                    <%=element.Task_Name-%></div><div class='scheduleElement'><span class='notCustom'>zadanie</span></div><%} else{-%>
+                    <%=element.Script_Name%></div><div class='scheduleElement'><span class='notCustom'>skrypt</span></div><%}%><div class='scheduleElement'><%=weekDays[element.Day-1]%></div><div class='scheduleElement'> <%=element.Start_Time%></div><div class='scheduleElement'><%=element.End_Time%></div><div class='scheduleElement'><button>Edytuj</button><button onclick='removeScheduleItem(<%=JSON.stringify(element.Schedule_ID)%>)'>
+                    Usun</button></div>
+            </li>
+        <%})%>
+        <li>
+         <form id='newScheduleItem' action='addScheduleItem' method='POST'>
+                Urzadzenie: 
+                <select name='Device_ID' onchange='swapDeviceTasks(<%=JSON.stringify(tasks)%>,Was_Custom_Script.checked,<%=JSON.stringify(devices)%>,Device_ID.value)'>
+                    <%devices.forEach(device =>{%>
+                        <option value='<%=device.Device_ID%>'>
+                            <%=device.Device_Name%>
+                        </option>
+                    <%})%>
+                </select>
+                Czy skrypt: 
+                <input type='checkbox' name='Was_Custom_Script' value='true' onchange='swapTaskScript(<%=JSON.stringify(tasks)%>,<%=JSON.stringify(scripts)%>,Was_Custom_Script.checked)'>
+                Zadanie: 
+                <select name='Job'>
+                    <%tasks.forEach(task=>{%>
+                        <%if(task.Type_ID==firstDeviceType){%>
+                        <option value=<%=task.Task_ID%>>
+                            <%=task.Task_Name%>
+                        </option>
+                        <%}%>
+                    <%})%>
+                </select>
+                Dzien:
+                <select name='Day'>
+                    <%for(let i=0;i<7;i++){%>
+                        <%const j=i%>
+                        <option value=<%=j+1%>>
+                            <%=weekDays[j]%>
+                        </option>
+                    <%}%>
+                </select>
+                <div class='time'>
+                    Poczatek:
+                    <input name='beginH' type='number' min='0' max='23' required value='0'>:
+                    <input name='beginM'type='number' min='0' max='59'required value='0'>:
+                    <input name='beginS'type='number' min='0' max='59'required value='0'>
+                </div> 
+                <div class='time'>
+                    Koniec: 
+                    <input name='endH' type='number' min='0' max='23'required value='0'>:
+                    <input name='endM' type='number' min='0' max='59'required value='0'>:
+                    <input name='endS' type='number' min='0' max='59'required value='0'>
+                </div>
+                <button type='submit'>
+                    Dodaj
+                </button>
+            </form>
+        </li>
+        </ul>   
+    </content>
+</body>
