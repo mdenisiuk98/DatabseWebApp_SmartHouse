@@ -108,3 +108,7 @@ width:100%;
 	color: white;
 	text-decoration: none;
 }
+
+.hiddenElement{
+    display:none;
+}

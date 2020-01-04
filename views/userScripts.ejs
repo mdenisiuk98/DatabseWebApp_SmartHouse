@@ -1,0 +1,49 @@
+<head>
+    <title>Skrypty uzytkownika <%=session.username%></title>
+    <%- include ('./partials/head.ejs')%>
+    <link rel='stylesheet' type="text/css" href="./userScripts.css">
+    <script type="text/javascript" src='./scriptListScripts.js'></script>
+</head>
+<body>
+<%- include ('./partials/header.ejs')%>
+    <content>
+        <h2>Skrypty uzytkownika: <%=session.username%></h2>
+        <% var idCounter=0%>
+        <ul class='scriptList'>
+            <%scripts.forEach(element=>{%>
+                <%idCounter+=1%>
+                <%const idPass=idCounter%>
+                <li id='<%='script_'+idPass%>'>
+                    <div class='scriptListElement'>
+                        <%=element.User_Name%>
+                    </div>
+                    <div class='scriptListElement nameDiv'>
+                        <%=element.Script_Name%>
+                    </div>
+                    <div class='scriptListElement privilegeDiv'>
+                        <%=element.Authorization_Level%>
+                    </div>
+                    <div class='scriptListElement'>
+                        <div class='hiddenElement scriptCodeWrapper'>
+                            <div class='scriptCode'>
+                                <%=element.Code%>
+                            </div> 
+                            <button class='editBtn' onclick='editCode(<%=JSON.stringify('script_'+idPass)%>,<%=JSON.stringify(session.userPrivilege)%>)'>Edytuj skrypt</button>
+                        </div>
+                        <button class='toogleBtn' onclick='toogleCode(<%=JSON.stringify('script_'+idPass)%>)'>Pokaz kod</button>
+                        <button class='deleteBtn' onclick='removeScript(<%=JSON.stringify(element.Script_Name)%>)'>Usun skrypt</button>
+                    </div>
+                </li>
+            <%})%>
+            <li>DODAJ NOWY SKRYPT
+                <form name='newScript' action='addScript' method='POST'>
+                    Nazwa:<input type='text' name='Script_Name' placeholder='Nowy skrypt'>
+                    <br>Wymagany poziom uprawnien do uzycia:<input type='number' name='Authorization_Level' min='1' max='<%=session.userPrivilege%>' required value='1'>
+                    <br>Skrypt:<input type='text' name='Code' placeholder='Tutaj wpisz kod nowego skryptu'>
+                    <br><button type='submit' method='POST' action='addCustomScript'>Dodaj</button>
+                </form>
+            </li>
+        </ul>
+
+    </content>
+</body>

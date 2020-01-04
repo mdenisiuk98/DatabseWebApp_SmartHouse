@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"SERVER DZIALA NA \" && exit 1"
+    
+    
   },
   "author": "",
   "license": "ISC",
@@ -16,4 +18,5 @@
     "mysql2": "^2.0.1",
     "nodemon": "^2.0.2"
   }
+   
 }

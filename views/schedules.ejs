@@ -16,18 +16,20 @@
                     <div class='scheduleElement'>URZADZENIE</div><div class='scheduleElement'>Zadanie/Skrypt</div><div class='scheduleElement'>Rodzaj</div><div class='scheduleElement'>Dzien</div><div class='scheduleElement'>Godz. poczatku</div><div class='scheduleElement'>Godz. konca</div>
             </li>
         <% schedule.forEach(element => { %>
-            <li>
+            <%var deviceIDArg = devices.filter(deviceElement =>{ if(element.Device_Name==deviceElement.Device_Name){return deviceElement.Device_ID}})[0].Device_ID%>
+            <li id=<%='schedule_'+element.Schedule_ID%>>
                <div class='scheduleElement'><%=element.Device_Name%></div><div class='scheduleElement'>
+                
                 <% if(element.Was_Custom_Script==false){-%>
                     <%=element.Task_Name-%></div><div class='scheduleElement'><span class='notCustom'>zadanie</span></div><%} else{-%>
-                    <%=element.Script_Name%></div><div class='scheduleElement'><span class='notCustom'>skrypt</span></div><%}%><div class='scheduleElement'><%=weekDays[element.Day-1]%></div><div class='scheduleElement'> <%=element.Start_Time%></div><div class='scheduleElement'><%=element.End_Time%></div><div class='scheduleElement'><button>Edytuj</button><button onclick='removeScheduleItem(<%=JSON.stringify(element.Schedule_ID)%>)'>
+                    <%=element.Script_Name%></div><div class='scheduleElement'><span class='notCustom'>skrypt</span></div><%}%><div class='scheduleElement'><%=weekDays[element.Day-1]%></div><div class='scheduleElement'> <%=element.Start_Time%></div><div class='scheduleElement'><%=element.End_Time%></div><div class='scheduleElement'><button onclick='editScheduleItem(<%=JSON.stringify(element)%>,<%=JSON.stringify(deviceIDArg)%>,"<%='schedule_'+element.Schedule_ID%>")' name='editBtn'>Edytuj</button><button class='removeBtn' onclick='removeScheduleItem(<%=JSON.stringify(element.Schedule_ID)%>)'>
                     Usun</button></div>
             </li>
         <%})%>
         <li>
          <form id='newScheduleItem' action='addScheduleItem' method='POST'>
                 Urzadzenie: 
-                <select name='Device_ID' onchange='swapDeviceTasks(<%=JSON.stringify(tasks)%>,Was_Custom_Script.checked,<%=JSON.stringify(devices)%>,Device_ID.value)'>
+                <select name='Device_ID' onchange='swapDeviceTasks(<%=JSON.stringify(tasks)%>,Was_Custom_Script.checked,<%=JSON.stringify(devices)%>,Device_ID.value,"newScheduleItem")'>
                     <%devices.forEach(device =>{%>
                         <option value='<%=device.Device_ID%>'>
                             <%=device.Device_Name%>
@@ -35,7 +37,7 @@
                     <%})%>
                 </select>
                 Czy skrypt: 
-                <input type='checkbox' name='Was_Custom_Script' value='true' onchange='swapTaskScript(<%=JSON.stringify(tasks)%>,<%=JSON.stringify(scripts)%>,Was_Custom_Script.checked)'>
+                <input type='checkbox' name='Was_Custom_Script' value='true' onchange='swapTaskScript(<%=JSON.stringify(tasks)%>,<%=JSON.stringify(scripts)%>,Was_Custom_Script.checked,"newScheduleItem")'>
                 Zadanie: 
                 <select name='Job'>
                     <%tasks.forEach(task=>{%>
@@ -67,9 +69,7 @@
                     <input name='endM' type='number' min='0' max='59'required value='0'>:
                     <input name='endS' type='number' min='0' max='59'required value='0'>
                 </div>
-                <button type='submit'>
-                    Dodaj
-                </button>
+                <button type='submit' class='updateFormBtn'>Dodaj</button>
             </form>
         </li>
         </ul>   

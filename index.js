@@ -175,10 +175,14 @@ app.post('/deviceGroups',async function(req,res){
 })
 
 app.get('/schedules',async function(req,res){
+  if(req.session.loggedin){
   let selectQuery='SELECT * FROM Weekly_Plan; SELECT * FROM Task; SELECT * FROM Custom_Script; SELECT Device_Name,Device_ID,Type_ID FROM Device;'
   const results = await executeQuery(selectQuery)
   let date=new Date()
   res.render('schedules.ejs',{date: date,session: req.session,schedule: results[0],tasks: results[1],scripts: results[2],devices: results[3]})
+  }else{
+    res.redirect('/login')
+  }
 })
 
 app.post('/addScheduleItem', async function(req,res){
@@ -208,6 +212,72 @@ app.post('/removeScheduleItem', async function(req,res){
   let removeQuery=('DELETE FROM Schedule WHERE Schedule_ID=' + req.body.Schedule_ID + ';')
   await executeQuery(removeQuery)
   res.redirect('/schedules')
+})
+
+app.post('/updateScheduleElement', async function(req,res){
+
+  if(req.body.Was_Custom_Script=='true'){
+    req.body.Was_Custom_Script=true
+  }
+  else{
+    req.body.Was_Custom_Script=false
+  }
+
+  let updateQuery=('UPDATE Schedule SET Device_ID=' + req.body.Device_ID +
+    ', Start_Time=' + '\'' +req.body.beginH+':'+req.body.beginM+':'+req.body.beginS+'\', End_Time= \''+
+    req.body.endH+ ':' + req.body.endM + ':' + req.body.endS+'\', Day= ' + req.body.Day + ', Was_Custom_Script= ' + req.body.Was_Custom_Script)
+  if( req.body.Was_Custom_Script==true){
+   updateQuery+=', Script_ID= '
+  }
+  else{
+    updateQuery+=', Task_ID= '
+  }
+  updateQuery+=(req.body.Job + '\nWHERE Schedule_ID= ' + req.body.Schedule_ID + ';')
+
+  console.log(updateQuery)
+  await executeQuery(updateQuery)
+  res.redirect('/schedules')
+})
+
+app.get('/userScripts',async function(req,res){
+  if(req.session.loggedin){
+    let selectQuery=('SELECT * FROM Users_Scripts WHERE User_Name=\'' + req.session.username+'\';')
+    var scripts = await executeQuery(selectQuery)
+  res.render('./userScripts.ejs',{session: req.session,date: new Date(),scripts: scripts})
+  }
+  else{
+    res.redirect('/login')
+  }
+})
+
+app.post('/modifyScript',async function(req,res){
+  //console.log(req.body)
+  let updateQuery='UPDATE Custom_Script SET Script_Name=\'' + req.body.Script_Name+ 
+  '\', Authorization_Level=' + req.body.Authorization_Level + ', Code=\'' + req.body.Code +
+  '\' WHERE Script_Name = \'' + req.body.oldName +'\';' 
+ // console.log(updateQuery)
+ await executeQuery(updateQuery)
+  res.end()
+})
+
+async function getUserID(username){
+  var ID= await executeQuery('SELECT User_ID FROM User WHERE User_Name=\'' + username+'\';')
+  return ID[0].User_ID
+}
+
+app.post('/addScript',async function(req,res){
+  var userID = await getUserID(req.session.username)
+  let insertQuery = 'INSERT INTO Custom_Script(Script_Name,Authorization_Level,Code,User_ID)'+
+  '\nVALUES (\''+req.body.Script_Name+'\','+req.body.Authorization_Level+',\''+req.body.Code+'\','+
+  userID+');'
+  await executeQuery(insertQuery)
+  res.redirect('./userScripts')
+})
+
+app.post('/removeScript',async function(req,res){
+    let deleteQuery='DELETE FROM Custom_Script WHERE Script_Name=\'' + req.body.Script_Name +'\';'
+    await executeQuery(deleteQuery)
+    res.end()
 })
 
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);
