@@ -1,0 +1,46 @@
+<head>
+	<title>Status urzadzen w systemie</title>
+    <%- include ('./partials/head.ejs')%>
+    <link rel='stylesheet' type="text/css" href="./history.css">
+</head>
+<body>
+
+	<%- include ('./partials/header.ejs') %>
+    <%var weekDays = ['PON','WT','SR','CZW','PT','SOB','NDZ']%>
+
+	<content>
+            <div>
+                <ul class = " description_package ">
+                    <li>Lp.</li>
+                    <li> Urzadzenie</li>
+                    <li> Wykonywana czynnosc</li>
+                    <li> Rozpoczeto </li>
+                    <li> Zakonczono </li>
+                    <li> Zuzycie energii </li>
+                </ul>
+                <ul class='historyRows'>
+                    <%events.forEach(element=>{%>
+                    <li>
+                        <div class ="history">
+                            <ul class="historyContent">
+                                <li><%=element.Event_ID%></li>
+                                <li><%=element.Device_Name%></li>
+                                <%if(element.Was_Custom_Script==true){%>
+                                <li><%=element.Script_Name%></li>
+                                <%} else{%>
+                                <li><%=element.Task_Name%></li>
+                                <%}%>
+                                <li><%=element.Start_Time.toLocaleString("pl-PL")%></li>
+                                <li><%=element.End_Time.toLocaleString("pl-PL")%></li>
+                                <li><%=element.Power_Used%> W</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <%})%>
+                </ul>
+            </div>
+
+    </content>
+</body>
+
+

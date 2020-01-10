@@ -1,0 +1,65 @@
+<head>
+	<title>Status urzadzen w systemie</title>
+    <%- include ('./partials/head.ejs')%>
+    <link rel='stylesheet' type="text/css" href="./deviceList.css">
+    <link rel='stylesheet' type="text/css" href="./devicesStatus.css">
+</head>
+<body>
+
+	<%- include ('./partials/header.ejs') %>
+
+
+	<content>
+        <div class='typesContainer'>
+            <ul>
+                <li>
+                   <div class='categoryName'>Obecnie pracujace</div> 
+                    <ul class='devices'>
+                        <%devices.running.forEach(element=>{%>
+                            <li class='runningDevice deviceContainer'>
+                                <div class='deviceName'><%=element.Device_Name%></div>
+                                <div class='deviceDetails' id="<%= element.Device_Name %>">
+                                    <span class='row'><span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span></span>
+                                    <span class='row'> <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span></span>
+                                    <span class='row'>  <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span></span>
+                                </div>
+                            </li>
+                        <%})%>
+                    </ul>
+                </li>
+                <li>
+                    <br>
+                    <div class='categoryName'>Aktywne</div> 
+                    <ul class='devices'>
+                        <%devices.active.forEach(element=>{%>
+                            <li class='activeDevice deviceContainer'>
+                                <div class='deviceName'><%=element.Device_Name%></div>
+                                <div class='deviceDetails' id="<%= element.Device_Name %>">
+                                    <span class='row'><span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span></span>
+                                    <span class='row'> <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span></span>
+                                    <span class='row'>  <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span></span>
+                                </div>
+                            </li>
+                        <%})%>
+                    </ul>
+                </li>
+                <li>
+                    <br>
+                    <div class='categoryName'>Nieaktywne</div> 
+                    <ul class='devices'>
+                        <%devices.inactive.forEach(element=>{%>
+                            <li class='inactiveDevice deviceContainer'>
+                                <div class='deviceName'><%=element.Device_Name%></div>
+                                <div class='deviceDetails' id="<%= element.Device_Name %>">
+                                    <span class='row'><span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span></span>
+                                    <span class='row'> <span class='categorySpan'>W pokoju:</span>  <span class='valueSpan'><%= element.Room_Name %></span></span>
+                                    <span class='row'>  <span class='categorySpan'>Adres IP:</span>  <span class='valueSpan'><%= element.IP_Address %></span></span>
+                                </div>
+                            </li>
+                        <%})%>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+	</content>
+</body>

@@ -1,0 +1,27 @@
+.activeDevice .deviceName{
+    background: #E5B6FF;
+}
+
+.inactiveDevice .deviceName{
+    background: lightgrey;
+    color: gray;
+}
+
+
+.runningDevice .deviceName{
+    background: lightgreen;
+}
+
+.typesContainer ul{
+    list-style: none;
+    text-align: center;
+    padding: 0;
+}
+
+.categoryName{
+    box-sizing: border-box;
+    width: 100%;
+    display:block;
+    background: burlywood;
+    border: 5px solid black;
+}

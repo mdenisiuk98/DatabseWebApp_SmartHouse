@@ -280,6 +280,94 @@ app.post('/removeScript',async function(req,res){
     res.end()
 })
 
+app.get('/groups',async function(req,res){
+  var getQuery = 'SELECT * FROM Device_Groups;'
+  var result = await executeQuery(getQuery)
+  getQuery2 = 'SELECT * FROM `Group`;'
+  var allGroups = await executeQuery(getQuery2)
+  var groups = []
+  
+  var index = 0
+  allGroups.forEach(group=>{
+    var temp = {
+      Group_Name : group.Group_Name,
+      Group_ID : group.Group_ID,
+      Members : result.filter(element=>{
+      //  console.log(element.Group_Name + ' ' + group.Group_Name + ' ' + (element.Group_Name==group.Group_Name))
+        if(element.Group_Name===group.Group_Name){
+        //  console.log('halo')
+          return element;
+        }
+      })
+    }
+    groups.push(temp)
+  })
+ // console.log(groups)
+  getQuery = 'SELECT Device_ID,Device_Name FROM Device;'
+  var devices = await executeQuery(getQuery)
+ // console.log(groups[1])
+ console.log(req.body)
+  res.render('groups.ejs',{session: req.session,date: new Date(),groups: groups,devices,devices})
+})
+
+
+app.post('/groups',async function(req,res){
+  let requestQuery =''
+  if(req.body.REQType=='newGroup'){
+    requestQuery= 'INSERT INTO `smart_house`.`Group` (Group_Name) VALUES("' + req.body.Group_Name + '");'
+  }
+  else if(req.body.REQType=='removeGroup'){
+    requestQuery = 'DELETE FROM `smart_house`.`Group` WHERE Group_ID=' + req.body.Group_ID +';'
+  }
+  else if(req.body.REQType=='renameGroup'){
+    requestQuery = 'UPDATE `smart_house`.`Group` SET Group_Name="' + req.body.Group_Name +'" WHERE Group_Name="' + req.body.Old_Name +'";'
+  }
+  else if(req.body.REQType=='removeMember'){
+    requestQuery = 'DELETE FROM Group_Member WHERE Group_ID=' + req.body.Group_ID +' AND Device_ID=' + req.body.Device_ID +';' 
+  }
+  else if(req.body.REQType=='newMember'){
+    console.log(req.body)
+    requestQuery = 'INSERT INTO Group_Member (Group_ID,Device_ID) VALUES(' + req.body.Group_ID +',' + req.body.Device_ID +');'
+  }
+  if(requestQuery!=''){
+    await executeQuery(requestQuery)
+  }
+  res.redirect('/groups')
+})
+
+app.get('/devicesStatus',async function(req,res){
+  let getQuery = 'SELECT Status_ON_OFF,Device_Name,Room_Name,Type_Name,IP_Address FROM Device_Detailed; SELECT * FROM Currently_Running;'
+  var results = await executeQuery(getQuery)
+  var responseData = {
+    inactive: [],
+    active: [],
+    running: []
+  };
+  results[0].forEach(element=>{
+    if(results[1].find(item=>{
+      if(item.Device_Name == element.Device_Name){
+        return item
+      }
+    })!=null){
+      responseData.running.push(element)
+    }
+    else if(element.Status_ON_OFF==true){
+      responseData.active.push(element)
+    }
+    else{
+      responseData.inactive.push(element)
+    }
+  })
+  res.render('devicesStatus.ejs',{date: new Date(),devices: responseData,session: req.session})
+})
+
+app.get('/history',async function(req,res){
+  let getQuery='SELECT * FROM History'
+  var events = await executeQuery(getQuery)
+  console.log(events)
+  res.render('history.ejs',{date: new Date(),session: req.session,events: events})
+})
+
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);
 console.log('Server running at http://'+config.serverSettings.ipAddress+':'+config.serverSettings.port+'/');
 

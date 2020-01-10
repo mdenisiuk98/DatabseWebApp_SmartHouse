@@ -1,0 +1,116 @@
+<head>
+    <title>Grupy urzadzen</title>
+    <%- include ('./partials/head.ejs')%>
+    <link rel='stylesheet' type="text/css" href="./deviceList.css">
+    <script type="text/javascript" src="./deviceListScripts.js"></script>
+    <script>
+
+        function resetNameForm(id, old){
+            var parent = document.querySelector('#' + id + ' .groupName')
+            parent.innerHTML = old
+            parent = document.querySelector('#' + id + ' .renameGroupBtn')
+            parent.classList.remove('hiddenElement')
+            parent = document.querySelector('#' + id + ' .deleteGroupBtn')
+            parent.classList.remove('hiddenElement')
+        }
+        function renameGroup(groupName){
+            var oldBtn = document.querySelector('#' + groupName + ' .renameGroupBtn')
+            oldBtn.classList.add('hiddenElement')
+            oldBtn = document.querySelector('#' + groupName + ' .deleteGroupBtn')
+            oldBtn.classList.add('hiddenElement')
+            var change = document.querySelector('#' + groupName + ' .groupName')
+            var oldName = change.innerHTML.trim()
+            change.innerHTML=''
+            var renameForm = document.createElement('form')
+            var newName = document.createElement('input')
+            newName.type='text'
+            newName.setAttribute("required","required")
+            newName.name='Group_Name'
+            newName.placeholder=oldName
+           
+            var submit = document.createElement('button')
+            submit.textContent = 'ZAPISZ'
+            submit.type='submit'
+
+            var oldNameInput = document.createElement('input')
+            oldNameInput.type='hidden'
+            oldNameInput.name='Old_Name'
+            oldNameInput.value = oldName
+
+            var reqType = document.createElement('input')
+            reqType.type='hidden'
+            reqType.name='REQType'
+            reqType.value = 'renameGroup'
+
+            var cancel = document.createElement('button')
+            cancel.setAttribute('onclick','resetNameForm("'+ groupName+'", "'+oldName + '")')
+            cancel.textContent = 'ANULUJ'
+            cancel.type='button'
+            renameForm.append(reqType)
+            renameForm.append(newName)
+            renameForm.append(oldNameInput)
+            renameForm.append(submit)
+            renameForm.append(cancel)
+            
+            renameForm.method='POST'
+            change.append(renameForm)
+        }
+    </script>
+</head>
+<body>
+
+<%- include ('./partials/header.ejs')%>
+
+
+<content>
+
+    
+    <h3>Przeglądanie grup urządzeń</h3>
+
+    <ul class='groupList'>
+    <%groups.forEach(group=>{%>
+        <li class='groupContainer' id='group_<%=group.Group_ID%>'>
+            <div class='groupName'>
+                <%=group.Group_Name%>
+            </div>
+            <form class='oneBtnForm deleteGroupBtn' method='POST' action='groups'><input type='hidden' name='Group_ID' value='<%=group.Group_ID%>'><input type='hidden' value='removeGroup' name='REQType'> <button type='submit' class='removeGroupBtn'>Usun grupe</button></form>
+           
+            <button class='renameGroupBtn' onclick='renameGroup("group_<%=group.Group_ID%>")'>Zmien nazwe grupy</button>
+            <ol class='groupMembersList'>
+                <%group.Members.forEach(member=>{%>
+                    <li class='groupMember'>
+                        <%=member.Device_Name%> 
+                        <form class='oneBtnForm' method='POST' action='groups'><input type='hidden' name='Group_ID' value='<%=group.Group_ID%>'><input type ='hidden' name='Device_ID' value='<%=member.Device_ID%>'><input type='hidden' value='removeMember' name='REQType'> <button type='submit' class='removeGroupBtn'>Usun</button></form>
+           
+                    </li>
+                    
+                <%})%>
+                <form class='addMember' method='POST' action='groups'>
+                    Dodaj urzadzanie: <select class='pickNewDevice'  name='Device_ID'>
+                       <%devices.forEach(device=>{%>
+                        
+                            <%if (group.Members.filter(element=>{if(element.Device_Name==device.Device_Name)return device}).length<=0){%>
+                                <option value='<%=device.Device_ID%>'> <%=device.Device_Name%> </option>
+                            <%}%>
+                        
+                        <%})%>
+                        </select>
+                        <input type='hidden' name ='Group_ID' value='<%=group.Group_ID%>'>
+                        <input type='submit'  class='addMemberBtn'>
+                        <input type='hidden' name='REQType' value='newMember'>
+                </form>
+            </ol>
+        </li>
+    <%})%>
+    <li>
+        Dodaj nowa grupe
+        <form class='newGroupForm' method='POST' action='groups'>
+            Nazwa:<input type='text' name='Group_Name'>
+            <button type='submit' method='POST'>DODAJ</button>
+            <input type='hidden' name='REQType' value='newGroup'>
+
+        </form>
+    </li>
+    </ul>
+</content>
+</body>

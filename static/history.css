@@ -1,0 +1,52 @@
+.history{
+    margin: 0px;
+    list-style: none;
+}
+
+.history .historyContent{
+    width: 100%;
+    margin-top: 0;
+    margin-bottom:none;
+    list-style-type: none;
+    list-style: none;
+    background-color: tomato;
+    display: grid;
+    grid-template-columns: 5% 20% 25% 20% 20% 10%;
+    padding: 0;
+}
+
+.history .historyContent li{
+    display: grid-cell;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 2.5vh;
+    color: black;
+    background-color: seagreen;
+    box-sizing: border-box;
+    padding: 0.2vh;
+}
+
+
+ .description_package{
+    margin: 0;
+    list-style-type: none;
+    list-style: none;
+    background-color: azure;
+    width: 100%;
+    display: inline-grid;
+    grid-template-columns: 5% 20% 25% 20% 20% 10%;
+    padding: 0;
+}
+
+.description_package li{
+   
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 2.5vh;
+    background-color: thistle;
+}
+
+.historyRows{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+}
