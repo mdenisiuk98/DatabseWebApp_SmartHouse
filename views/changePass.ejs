@@ -1,0 +1,29 @@
+<head>
+        <title>Zmiana hasla</title>
+        <%- include ('./partials/head.ejs')%>
+    </head>
+    <body>
+    
+        <%- include ('./partials/header.ejs') %>
+    
+        <content>
+            <h3>Resetowanie hasla</h3>
+
+            <%if(success==true){%>
+                <h3>Pomyslnie zmieniono haslo!</h3>
+            <%}%>
+            <%if(success=='fail'){%>
+                <h3>Nie udalo sie zmienic hasla!</h3>
+            <%}%>
+            <form class='passResetForm' method='POST' action='./changePass'>
+               Nowe haslo: <input type='password' name='newPass' required>
+               Stare haslo: <input type='password' name='oldPass' required>
+               Podaj ponownie haslo: <input type='password' name='oldPassValidate' required>
+               <input type='submit' value='Zapisz' name='Save' onclick='if(oldPass.value===oldPassValidate.value){return true}else{valid.value="Niezgodne hasla"; return false;}'>
+              <br> <output name='valid'class='invalidPass'></output>
+            </form>
+        </content>
+    </body>
+    
+    
+    

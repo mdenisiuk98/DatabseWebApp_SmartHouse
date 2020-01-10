@@ -368,6 +368,24 @@ app.get('/history',async function(req,res){
   res.render('history.ejs',{date: new Date(),session: req.session,events: events})
 })
 
+app.get('/changePass',async function(req,res){
+  res.render('changePass.ejs',{session:req.session,success:false})
+})
+
+app.post('/changePass',async function(req,res){
+  let confirmQuery = 'SELECT User_Name,Password FROM User WHERE Password = "' + req.body.oldPass + '" AND User_Name = "' + req.session.username + '";'
+  let credentials = await executeQuery(confirmQuery)
+  let changeSuccess = 'fail';
+  if (credentials.length > 0) {
+    let changePassQuery = 'UPDATE User SET Password="' + req.body.newPass +'" WHERE User_Name="' + req.session.username +'" AND Password = "' + req.body.oldPass +'";'
+    await executeQuery(changePassQuery)
+    changeSuccess=true;
+  }
+  res.render('changePass.ejs',{session:req.session,success: changeSuccess})
+})
+
+
+
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);
 console.log('Server running at http://'+config.serverSettings.ipAddress+':'+config.serverSettings.port+'/');
 
