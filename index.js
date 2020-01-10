@@ -283,11 +283,9 @@ app.post('/removeScript',async function(req,res){
 app.get('/groups',async function(req,res){
   var getQuery = 'SELECT * FROM Device_Groups;'
   var result = await executeQuery(getQuery)
-  getQuery2 = 'SELECT * FROM `Group`;'
+  getQuery2 = 'SELECT * FROM `Group` g LEFT JOIN Power_Consumed_Group p ON (g.Group_Name=p.Group_Name) ORDER BY g.Group_Name;'
   var allGroups = await executeQuery(getQuery2)
   var groups = []
-  
-  var index = 0
   allGroups.forEach(group=>{
     var temp = {
       Group_Name : group.Group_Name,
@@ -298,11 +296,12 @@ app.get('/groups',async function(req,res){
         //  console.log('halo')
           return element;
         }
-      })
+      }),
+      Power_Used: group.Power_Used
     }
     groups.push(temp)
   })
- // console.log(groups)
+  console.log(groups)
   getQuery = 'SELECT Device_ID,Device_Name FROM Device;'
   var devices = await executeQuery(getQuery)
  // console.log(groups[1])
@@ -384,6 +383,41 @@ app.post('/changePass',async function(req,res){
   res.render('changePass.ejs',{session:req.session,success: changeSuccess})
 })
 
+app.get('/users',async function(req,res){
+  var getQuery='SELECT * FROM User'
+  var users = await executeQuery(getQuery)
+  res.render('users.ejs',{session: req.session,users: users})
+})
+
+app.post('/removeUser',async function(req,res){
+  let removeQuery = 'DELETE FROM User WHERE User_ID=' + req.body.User_ID +';'
+  await executeQuery(removeQuery)
+  res.end()
+})
+
+app.post('/users', async function(req,res){
+  console.log('DODAJE USERA ' + req.body.User_Name)
+  res.end()
+})
+
+app.post('/changeUserPrivilege',async function(req,res){
+  console.log('Zmieniam uprawnienia usera ' + req.body.User_ID + ' na ' + req.body.Authorization_Level)
+  res.end()
+})
+
+
+app.get('/deviceStats',async function(req,res){
+  let getQuery = 'SELECT * FROM Device_Stats WHERE Device_Name="' + req.query.Device_Name +'";'
+  var statistics = await executeQuery(getQuery)
+  console.log(statistics[0])
+  res.render('deviceStats.ejs',{session: req.session,stats: statistics[0]})
+})
+
+app.get('/factoryTasks',async function(req,res){
+  let getQuery='SELECT t.Task_Name,d.Type_Name FROM Task t LEFT JOIN Type d ON (t.Type_ID=d.Type_ID) ORDER BY d.Type_Name,t.Task_Name;'
+  var tasks = await executeQuery(getQuery)
+  res.render('factoryTasks.ejs',{session: req.session, tasks: tasks})
+})
 
 
 app.listen(config.serverSettings.port, config.serverSettings.ipAddress);

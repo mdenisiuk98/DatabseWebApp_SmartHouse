@@ -1,0 +1,29 @@
+<head>
+    <title>Statystyki urzadzenia - <%=stats.Device_Name%></title>
+    <%- include ('./partials/head.ejs')%>   
+    <link rel='stylesheet' type="text/css" href="./deviceList.css">
+</head>
+<body>
+    <%- include ('./partials/header.ejs') %> 
+    <content>
+            <center>
+            <div class='deviceContainer'>
+                <div class='deviceName'>
+                    Statystyki urzadzenia - <%=stats.Device_Name%>
+                </div>
+                <div class='deviceDetails'>
+                    <span class='row'><span class='categorySpan'>Ostatnio aktywne:</span>
+                    <%if(stats.Last_Used!=null){%>
+                    <span class='valueSpan'><%= stats.Last_Used %></span></span>
+                    <%}else{%>
+                        <span class='valueSpan'> --- </span></span>
+                    <%}%>
+                    <span class='row'><span class='categorySpan'>Wprowadzono do systemu:</span>
+                    <span class='valueSpan'><%= stats.Active_Since %></span></span>
+                    <span class='row'><span class='categorySpan'>Lacznie zuzyto pradu:</span>
+                    <span class='valueSpan'><%= stats.Power_Used %> W</span></span>
+                </div>
+            </div>
+            </center>
+    </content>
+</body>

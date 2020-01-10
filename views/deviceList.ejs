@@ -24,6 +24,10 @@
                                         Edytuj
                                     </button>
                                 <%}%>
+                                <form class='showStatsForm' action='/deviceStats' method='GET'>
+                                        <input type='hidden' value='<%=element.Device_Name%>' name='Device_Name'>
+                                        <input class='editButton' type='submit' value='Statystyki'>
+                                    </form>
                         </div>
                         <div class='deviceDetails' id="<%= element.Device_Name %>">
                              <span class='row'><span class='categorySpan'>Typ urzadzenia:</span>  <span class='valueSpan'><%= element.Type_Name %></span></span>
@@ -70,7 +74,7 @@
                                     <option value= <%=type.Type_ID %>> <%=type.Type_Name%></option>
                                 <%})%>
                         </select><br>
-                        <center><button type='button' onclick='submitDevice(<%=JSON.stringify(session.username)%>,IP_Address.value,"newDevice")'>Zapisz</button>><input type='reset' onclick="clearError()" value='Zresetuj'></center>
+                        <center><button type='button' onclick='submitDevice(<%=JSON.stringify(session.username)%>,IP_Address.value,"newDevice")'>Zapisz</button><input type='reset' onclick="clearError()" value='Zresetuj'></center>
                     </form>
                 </div>
             </li>

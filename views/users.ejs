@@ -1,0 +1,79 @@
+<head>
+    <title>Lista uzytkownikow</title>
+    <%- include ('./partials/head.ejs')%>
+
+    <script>
+        async function removeUser(id){
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST",'/removeUser',true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send('User_ID=' + id);
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    location.reload();
+                }
+            }
+        }
+        async function changePrivilege(id){
+            var newPowerLevel = document.querySelector('#user_' + id + ' input[name="Authorization_Level"]').value
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST",'/changeUserPrivilege',true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send('User_ID=' + id + '&Authorization_Level=' + newPowerLevel);
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    location.reload();
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+    
+    <%- include ('./partials/header.ejs') %>
+    
+    <%var currentUser= 'brak'%>
+    <content>
+        <h3>Lista uzytkownikow</h3>
+        <div class = 'usersContainer'>
+            <ul class='usersList'>
+                <%if(session.username!=null){%>
+                <div> Obecny uzytkownik</div>
+                <li class='userElement'>
+                    <%currentUser = users.find(element=>{
+                        if(element.User_Name === session.username){
+                            return element
+                          }
+                    })%>
+                    <div>Login: </div><div class='detailValue'><%=currentUser.User_Name%></div>
+                       <div>Poziom uprawnien: </div> <div class='detailValue'><%=currentUser.Authorization_Level%></div>
+                       <div>Numer Telefonu: </div> <div class='detailValue'><%=currentUser.Phone_Number%></div>
+                </li>
+                <%}%>
+                <%users.forEach(element=>{
+                    if(element!=currentUser){%>
+                    <li class='userElement' id='user_<%=element.User_ID%>'>
+                       <div>Login: </div><div class='detailValue'><%=element.User_Name%></div>
+                       <div>Poziom uprawnien:</div> <div class='detailValue'><%=element.Authorization_Level%></div>
+                       <input type='number' min='1' max='<%=session.userPrivilege%>' required name='Authorization_Level' value='<%=element.Authorization_Level%>'>
+                       <button onclick='changePrivilege(<%=element.User_ID%>)'>Zmien poziom uprawnien</button>
+                       <div>Numer Telefonu: </div> <div class='detailValue'><%=element.Phone_Number%></div>
+                       <button onclick='removeUser(<%=element.User_ID%>)'>Usun</button>
+                    </li>
+                <%}})%>
+                <li class='addUserForm'>
+                    DODAJ UZYTKOWNIKA
+                    <form action='/users' method='POST'>
+                        <output class='invalid' name='error'></output>
+                        Login: <input type='text' name='User_Name' required>
+                        Haslo: <input type='password' name='Password' required>
+                        Powtorz haslo: <input type='password' name='oldPass' required>
+                        Poziom uprawnien: <input type='number' min='1' max='<%=session.userPrivilege%>' required name='Authorization_Level'>
+                        Numer telefonu <input type='text' name='Phone_Number' pattern='^[0-9]{9}$'>
+                        <input onclick='if(oldPass.value===Password.value){return true}else{error.value="Niezgodne hasla"; return false;}' type='submit' value='Dodaj'></input>
+                    </form>
+                </li>
+            </ul>
+    </content>
+</body>

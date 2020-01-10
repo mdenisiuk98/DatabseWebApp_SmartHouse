@@ -17,7 +17,7 @@
     background: beige;
     border: 4px solid black;
     
-   height: 90%;
+   height: 100%;
     width:90%;
     font-size: calc(8px + 1vmin);
 }
@@ -26,23 +26,31 @@
     text-align: center;
     background: burlywood;
     border-bottom: 4px solid black;
-    font-size: calc(9px + 1.4vmin);
+    font-size: calc(3px + 1.4vmin);
+    height: 10%;
+    width: 100%;
 }
 
 .editButton{
     box-sizing: border-box;
-    font-size: calc(6px + 1.4vmin);
+    font-size: calc(5px + 1.2vmin);
     display: inline-block;
     background: wheat;
     float: right;
+    height: 100%;
+    width: 15%;
+    padding: 0;
 }
 
 .deleteButton{
     box-sizing: border-box;
-    font-size: calc(6px + 1.4vmin);
+    font-size: calc(5px + 1.2vmin);
     display: inline-block;
     background: red;
     float: right;
+    height: 100%;
+    width: 15%;
+    padding: 0;
 }
 
 
@@ -53,6 +61,7 @@
     width: 50%;
     background: rgba(224, 224, 224, 0.5);
     color: #505050;
+    padding: 0;
 }
 
 .valueSpan{
@@ -93,9 +102,20 @@ form center input{
 }
 
 .deviceDetails{
+    font-size: calc(6px + 1.2vmin);
     height:100%;
 }
 
 .groupList li{
     height:min-content;
+}
+
+.showStatsForm{
+    display:inline;
+}
+
+.showStatsForm .editButton{
+    box-sizing: border-box;
+    padding: 0;
+    width: auto;
 }

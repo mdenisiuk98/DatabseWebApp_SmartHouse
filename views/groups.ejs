@@ -72,6 +72,8 @@
         <li class='groupContainer' id='group_<%=group.Group_ID%>'>
             <div class='groupName'>
                 <%=group.Group_Name%>
+
+                - grupa zuzyla <%=group.Power_Used%> kWh pradu
             </div>
             <form class='oneBtnForm deleteGroupBtn' method='POST' action='groups'><input type='hidden' name='Group_ID' value='<%=group.Group_ID%>'><input type='hidden' value='removeGroup' name='REQType'> <button type='submit' class='removeGroupBtn'>Usun grupe</button></form>
            

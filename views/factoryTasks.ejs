@@ -1,0 +1,19 @@
+<head>
+        <title>Predefiniowane zadania urzadzen</title>
+        <%- include ('./partials/head.ejs')%>
+    </head>
+    <body>
+    
+        <%- include ('./partials/header.ejs') %>
+    
+    
+        <content>
+            <ul class='taskList'>
+            <%tasks.forEach(element=>{%>
+                <li class='taskItem'>
+                    <%=element.Task_Name%> - <%=element.Type_Name%> 
+                </li>
+            <%})%>
+            </ul>
+        </content>
+    </body>
