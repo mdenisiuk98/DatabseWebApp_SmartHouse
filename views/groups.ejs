@@ -2,6 +2,7 @@
     <title>Grupy urzadzen</title>
     <%- include ('./partials/head.ejs')%>
     <link rel='stylesheet' type="text/css" href="./deviceList.css">
+    <link rel='stylesheet' type='text/css' href = "./groups.css">
     <script type="text/javascript" src="./deviceListScripts.js"></script>
     <script>
 
@@ -74,10 +75,11 @@
                 <%=group.Group_Name%>
 
                 - grupa zuzyla <%=group.Power_Used%> kWh pradu
-            </div>
+          
             <form class='oneBtnForm deleteGroupBtn' method='POST' action='groups'><input type='hidden' name='Group_ID' value='<%=group.Group_ID%>'><input type='hidden' value='removeGroup' name='REQType'> <button type='submit' class='removeGroupBtn'>Usun grupe</button></form>
            
             <button class='renameGroupBtn' onclick='renameGroup("group_<%=group.Group_ID%>")'>Zmien nazwe grupy</button>
+        </div>
             <ol class='groupMembersList'>
                 <%group.Members.forEach(member=>{%>
                     <li class='groupMember'>
@@ -104,9 +106,8 @@
             </ol>
         </li>
     <%})%>
-    <li>
-        Dodaj nowa grupe
-        <form class='newGroupForm' method='POST' action='groups'>
+    <li><center>Dodaj nowa grupe</center>
+        <form class='groupContainer' method='POST' action='groups'>
             Nazwa:<input type='text' name='Group_Name'>
             <button type='submit' method='POST'>DODAJ</button>
             <input type='hidden' name='REQType' value='newGroup'>

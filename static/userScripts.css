@@ -1,13 +1,29 @@
 .scriptList{
+    list-style:none;
+    margin: 0;
+    padding: 1%;
+}
 
+.scriptList li{
+    border: 1px solid black;
+    width:100%;
+    margin: 0;
+    margin-bottom: 3px;
+    background: #d894e9;
 }
 
 .scriptListElement{
-
+    border: 1px solid rgb(0,0,0,0.1)
 }
 
 
-.scriptCodeVisible{
-
+.scriptCode{
+    border: 1px solid black;
+    background: white;
+    color: black;
+    height: 100px;
+    width: 75%;
+    margin-left: 12.5%;
+    overflow: scroll;
 }
 

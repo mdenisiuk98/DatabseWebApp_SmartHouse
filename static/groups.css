@@ -1,0 +1,42 @@
+.groupList{
+    list-style:none;
+}
+
+.groupContainer{
+    background: #c14194;
+    border: 1px solid black;
+    margin-bottom: 2%;
+    margin-left: 5%;
+    width:90%;
+}
+
+.groupName{
+    text-align: center;
+}
+
+.deleteGroupBtn, .renameGroupBtn{
+    display: inline-block;
+    float: right;
+    margin: 3px;
+}
+
+.groupMembersList{
+    border: 1px solid rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.1);
+    list-style: none;
+    padding: 0;
+}
+
+.groupMember{
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    margin: 0;
+    width: 100%;
+    padding: 0;
+}
+
+.oneBtnForm{
+    float:right;
+    display: inline-block;
+    
+}

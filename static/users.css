@@ -1,0 +1,39 @@
+.usersContainer{
+    background: rgba(255,255,255,0.1);
+}
+
+.usersList{
+    list-style: none;
+    padding:0;
+}
+
+.userElement{
+    width: 75%;
+    margin-left: 12.5%;
+    background: #903ba5;
+    color: #f3d3f8;
+    border: 1px solid black;
+    margin-bottom: 5px;
+}
+
+.currentUserElement{
+    text-align: center;
+    background: rgba(0,0,0,0.1);
+}
+
+.detailValue{
+    display: inline-block;
+}
+
+.detailCategory{
+    display: inline-block;
+}
+
+.addUserForm{
+    width: 75%;
+    margin-left: 12.5%;
+    background: #903ba5;
+    color: #f3d3f8;
+    border: 1px solid black;
+    margin-bottom: 5px;
+}

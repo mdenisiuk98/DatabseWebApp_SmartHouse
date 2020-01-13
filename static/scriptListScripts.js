@@ -21,6 +21,7 @@ function editCode(scriptID, maxPrivilege){
     var textFieldCode = document.createElement('input')
     textFieldCode.type='text'
     textFieldCode.name='Code'
+    textFieldCode.classList.add('scriptCode')
     textFieldCode.value=oldCode.trim()
     inputWrapper.append(textFieldCode)
 

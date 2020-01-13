@@ -10,6 +10,7 @@
 
 .runningDevice .deviceName{
     background: lightgreen;
+    color: green;
 }
 
 .typesContainer ul{
@@ -22,6 +23,20 @@
     box-sizing: border-box;
     width: 100%;
     display:block;
-    background: burlywood;
-    border: 5px solid black;
+    background: #C298EA;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.deviceName{
+    height: 20%;
+}
+
+.deviceContainer{
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.devices li{
+    height: 90%;
 }

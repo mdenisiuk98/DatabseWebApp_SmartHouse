@@ -1,7 +1,7 @@
 <head>
     <title>Lista uzytkownikow</title>
     <%- include ('./partials/head.ejs')%>
-
+    <link rel='stylesheet' type='text/css' href='./users.css'>
     <script>
         async function removeUser(id){
             var xhr = new XMLHttpRequest();
@@ -39,26 +39,25 @@
         <div class = 'usersContainer'>
             <ul class='usersList'>
                 <%if(session.username!=null){%>
-                <div> Obecny uzytkownik</div>
                 <li class='userElement'>
-                    <%currentUser = users.find(element=>{
+                    <div class='currentUserElement'> Obecny uzytkownik</div><%currentUser = users.find(element=>{
                         if(element.User_Name === session.username){
                             return element
                           }
                     })%>
-                    <div>Login: </div><div class='detailValue'><%=currentUser.User_Name%></div>
-                       <div>Poziom uprawnien: </div> <div class='detailValue'><%=currentUser.Authorization_Level%></div>
-                       <div>Numer Telefonu: </div> <div class='detailValue'><%=currentUser.Phone_Number%></div>
+                    <div class='detailCategory'>Login: </div><div class='detailValue'><%=currentUser.User_Name%></div><br>
+                       <div class='detailCategory'>Poziom uprawnien: </div> <div class='detailValue'><%=currentUser.Authorization_Level%></div><br>
+                       <div class='detailCategory'>Numer Telefonu: </div> <div class='detailValue'><%=currentUser.Phone_Number%></div><br>
                 </li>
                 <%}%>
                 <%users.forEach(element=>{
                     if(element!=currentUser){%>
                     <li class='userElement' id='user_<%=element.User_ID%>'>
-                       <div>Login: </div><div class='detailValue'><%=element.User_Name%></div>
-                       <div>Poziom uprawnien:</div> <div class='detailValue'><%=element.Authorization_Level%></div>
+                       <div class='detailCategory'>Login: </div><div class='detailValue'><%=element.User_Name%></div><br>
+                       <div class='detailCategory'>Poziom uprawnien:</div> <div class='detailValue'><%=element.Authorization_Level%></div><br>
                        <input type='number' min='1' max='<%=session.userPrivilege%>' required name='Authorization_Level' value='<%=element.Authorization_Level%>'>
-                       <button onclick='changePrivilege(<%=element.User_ID%>)'>Zmien poziom uprawnien</button>
-                       <div>Numer Telefonu: </div> <div class='detailValue'><%=element.Phone_Number%></div>
+                       <button onclick='changePrivilege(<%=element.User_ID%>)'>Zmien poziom uprawnien</button><br>
+                       <div class='detailCategory'>Numer Telefonu: </div> <div class='detailValue'><%=element.Phone_Number%></div><br>
                        <button onclick='removeUser(<%=element.User_ID%>)'>Usun</button>
                     </li>
                 <%}})%>
@@ -66,11 +65,11 @@
                     DODAJ UZYTKOWNIKA
                     <form action='/users' method='POST'>
                         <output class='invalid' name='error'></output>
-                        Login: <input type='text' name='User_Name' required>
-                        Haslo: <input type='password' name='Password' required>
-                        Powtorz haslo: <input type='password' name='oldPass' required>
-                        Poziom uprawnien: <input type='number' min='1' max='<%=session.userPrivilege%>' required name='Authorization_Level'>
-                        Numer telefonu <input type='text' name='Phone_Number' pattern='^[0-9]{9}$'>
+                        Login: <input type='text' name='User_Name' required><br>
+                        Haslo: <input type='password' name='Password' required><br>
+                        Powtorz haslo: <input type='password' name='oldPass' required><br>
+                        Poziom uprawnien: <input type='number' min='1' max='<%=session.userPrivilege%>' required name='Authorization_Level'><br>
+                        Numer telefonu <input type='text' name='Phone_Number' pattern='^[0-9]{9}$'><br>
                         <input onclick='if(oldPass.value===Password.value){return true}else{error.value="Niezgodne hasla"; return false;}' type='submit' value='Dodaj'></input>
                     </form>
                 </li>

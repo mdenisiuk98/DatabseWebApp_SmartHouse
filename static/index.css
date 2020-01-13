@@ -13,15 +13,16 @@ header h1{
 	display: inline-block;
 	height:100%;
 	width:20%;
-	background: violet;
+	background: #C14194;
 	font-size: 2.2vmin;
 	top:0;
 	left:0%;
+	color:#FDD3EE;
 }
 
 
 body{
-	background: magenta;
+	background: #B761CC;
 	left:0;
 	top:0;
 	margin:0;
@@ -47,6 +48,7 @@ content{
 	position: absolute;
 	top: 10%;
 	width:100%;
+	color: #6E2081
 }
 nav{
 
@@ -57,7 +59,7 @@ vertical-align: top;
 	top:0;
 	height:100%;
 	border:0;
-		background:white;
+		background:#DD66B3;
 		overflow:hidden;
 
 		margin:0;
@@ -91,8 +93,8 @@ width:100%;
 	margin-top:0;
 	list-style: none;
 	display: inline-block;
-	color:white;
-	background: red;
+	color:#FDD3EE;
+	background: #C14194;
   justify-self: right;
 	text-align: center;
 	overflow: hidden;
@@ -105,10 +107,14 @@ width:100%;
 }
 
 .centering a{
-	color: white;
+	color:#FDD3EE;
 	text-decoration: none;
 }
 
 .hiddenElement{
     display:none;
+}
+
+.links{
+	list-style: none;
 }

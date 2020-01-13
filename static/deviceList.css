@@ -7,24 +7,23 @@
 }
 .devices li{
     display: grid-cell;
-    width: 100%;
+    width: 95%;
     height: 100%;
 
     margin: 3% 3%;
 }
 .deviceContainer{
    
-    background: beige;
-    border: 4px solid black;
-    
-   height: 100%;
-    width:90%;
+    background: #E9d5FB;
+    border: 2px solid black;
+   height: 95%;
+    width:95%;
     font-size: calc(8px + 1vmin);
 }
 
 .deviceName{
     text-align: center;
-    background: burlywood;
+    background: #C298EA;
     border-bottom: 4px solid black;
     font-size: calc(3px + 1.4vmin);
     height: 10%;
@@ -35,11 +34,13 @@
     box-sizing: border-box;
     font-size: calc(5px + 1.2vmin);
     display: inline-block;
-    background: wheat;
+    background: #7641a9;
     float: right;
     height: 100%;
     width: 15%;
     padding: 0;
+    color: white;
+    border: 1px solid black;
 }
 
 .deleteButton{
@@ -51,6 +52,7 @@
     height: 100%;
     width: 15%;
     padding: 0;
+    border: 1px solid black;
 }
 
 
@@ -76,7 +78,7 @@ form{
 
 input, select{
     position: relative;
-    width:40%;
+    width:30%;
     margin-left: 10%;
 }
 

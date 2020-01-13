@@ -9,7 +9,6 @@
     margin-bottom:none;
     list-style-type: none;
     list-style: none;
-    background-color: tomato;
     display: grid;
     grid-template-columns: 5% 20% 25% 20% 20% 10%;
     padding: 0;
@@ -19,10 +18,11 @@
     display: grid-cell;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 2.5vh;
-    color: black;
-    background-color: seagreen;
+   
+    background-color: #d894e965;
     box-sizing: border-box;
     padding: 0.2vh;
+    border: 1px solid black;
 }
 
 

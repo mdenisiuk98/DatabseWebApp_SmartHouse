@@ -78,7 +78,9 @@ app.get('/logout',function(req,res){
 });
 
 app.get('/deviceList',async function(req,res){
-
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   
   let date = new Date();
   if(req.session.userPrivilege>5){
@@ -89,11 +91,13 @@ app.get('/deviceList',async function(req,res){
   else{
     const devices = await executeQuery('SELECT * FROM Device_Detailed;');
     res.render('deviceList.ejs',{devices: devices, session: req.session,date: date});
-  }
+  }}
 });
 
 app.post('/deviceList', async function(req,res){
-
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   if(!req.body.Notifications_Enabled){
     req.body.Notifications_Enabled=false;
   }
@@ -112,11 +116,13 @@ app.post('/deviceList', async function(req,res){
   ' WHERE Device_Name = \'' + req.body.Device_Name_OLD + "\';";
   await executeQuery(updateQuery);
 
-  res.redirect('/deviceList');
+  res.redirect('/deviceList');}
 })
 
 app.post('/addDevice' ,async function(req,res){
-
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   if(!req.body.Notifications_Enabled){
     req.body.Notifications_Enabled=false;
   }
@@ -135,10 +141,13 @@ app.post('/addDevice' ,async function(req,res){
   catch(err){
     req.session.sqlError = err.code;
   }
-  res.redirect('/deviceList');
+  res.redirect('/deviceList');}
 })
 
 app.post('/removeDevice',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
   let removeQuery = 'DELETE FROM Device WHERE Device_Name = \'' + req.body.Device_Name + '\';'
   await executeQuery(removeQuery);
   res.end()
@@ -167,25 +176,31 @@ app.post('/revalidateAdmin', async function(req,res){
 })
 
 app.post('/deviceGroups',async function(req,res){
-
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
+  else{
     var device = req.body.Device_Name
     let getQuery = "SELECT Group_Name FROM Device_Groups WHERE Device_Name = \'" + device + "\';"
     const groups = await executeQuery(getQuery)
-    res.send(groups)
+    res.send(groups)}
 })
 
 app.get('/schedules',async function(req,res){
-  if(req.session.loggedin){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let selectQuery='SELECT * FROM Weekly_Plan; SELECT * FROM Task; SELECT * FROM Custom_Script; SELECT Device_Name,Device_ID,Type_ID FROM Device;'
   const results = await executeQuery(selectQuery)
   let date=new Date()
   res.render('schedules.ejs',{date: date,session: req.session,schedule: results[0],tasks: results[1],scripts: results[2],devices: results[3]})
-  }else{
-    res.redirect('/login')
   }
 })
 
 app.post('/addScheduleItem', async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   if(req.body.Was_Custom_Script=='true'){
     req.body.Was_Custom_Script=true
   }
@@ -205,17 +220,22 @@ app.post('/addScheduleItem', async function(req,res){
   }
   insertQuery+=commonValue
   await executeQuery(insertQuery)
-  res.redirect('/schedules')
+  res.redirect('/schedules')}
 })
 
 app.post('/removeScheduleItem', async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let removeQuery=('DELETE FROM Schedule WHERE Schedule_ID=' + req.body.Schedule_ID + ';')
   await executeQuery(removeQuery)
-  res.redirect('/schedules')
+  res.redirect('/schedules')}
 })
 
 app.post('/updateScheduleElement', async function(req,res){
-
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   if(req.body.Was_Custom_Script=='true'){
     req.body.Was_Custom_Script=true
   }
@@ -234,9 +254,9 @@ app.post('/updateScheduleElement', async function(req,res){
   }
   updateQuery+=(req.body.Job + '\nWHERE Schedule_ID= ' + req.body.Schedule_ID + ';')
 
-  console.log(updateQuery)
+ // console.log(updateQuery)
   await executeQuery(updateQuery)
-  res.redirect('/schedules')
+  res.redirect('/schedules')}
 })
 
 app.get('/userScripts',async function(req,res){
@@ -251,36 +271,51 @@ app.get('/userScripts',async function(req,res){
 })
 
 app.post('/modifyScript',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   //console.log(req.body)
   let updateQuery='UPDATE Custom_Script SET Script_Name=\'' + req.body.Script_Name+ 
   '\', Authorization_Level=' + req.body.Authorization_Level + ', Code=\'' + req.body.Code +
   '\' WHERE Script_Name = \'' + req.body.oldName +'\';' 
  // console.log(updateQuery)
  await executeQuery(updateQuery)
-  res.end()
+  res.end()}
 })
 
 async function getUserID(username){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   var ID= await executeQuery('SELECT User_ID FROM User WHERE User_Name=\'' + username+'\';')
-  return ID[0].User_ID
+  return ID[0].User_ID}
 }
 
 app.post('/addScript',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   var userID = await getUserID(req.session.username)
   let insertQuery = 'INSERT INTO Custom_Script(Script_Name,Authorization_Level,Code,User_ID)'+
   '\nVALUES (\''+req.body.Script_Name+'\','+req.body.Authorization_Level+',\''+req.body.Code+'\','+
   userID+');'
   await executeQuery(insertQuery)
-  res.redirect('./userScripts')
+  res.redirect('./userScripts')}
 })
 
 app.post('/removeScript',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
     let deleteQuery='DELETE FROM Custom_Script WHERE Script_Name=\'' + req.body.Script_Name +'\';'
     await executeQuery(deleteQuery)
-    res.end()
+    res.end()}
 })
 
 app.get('/groups',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   var getQuery = 'SELECT * FROM Device_Groups;'
   var result = await executeQuery(getQuery)
   getQuery2 = 'SELECT * FROM `Group` g LEFT JOIN Power_Consumed_Group p ON (g.Group_Name=p.Group_Name) ORDER BY g.Group_Name;'
@@ -301,16 +336,19 @@ app.get('/groups',async function(req,res){
     }
     groups.push(temp)
   })
-  console.log(groups)
+ // console.log(groups)
   getQuery = 'SELECT Device_ID,Device_Name FROM Device;'
   var devices = await executeQuery(getQuery)
  // console.log(groups[1])
- console.log(req.body)
-  res.render('groups.ejs',{session: req.session,date: new Date(),groups: groups,devices,devices})
+// console.log(req.body)
+  res.render('groups.ejs',{session: req.session,date: new Date(),groups: groups,devices,devices})}
 })
 
 
 app.post('/groups',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let requestQuery =''
   if(req.body.REQType=='newGroup'){
     requestQuery= 'INSERT INTO `smart_house`.`Group` (Group_Name) VALUES("' + req.body.Group_Name + '");'
@@ -325,16 +363,19 @@ app.post('/groups',async function(req,res){
     requestQuery = 'DELETE FROM Group_Member WHERE Group_ID=' + req.body.Group_ID +' AND Device_ID=' + req.body.Device_ID +';' 
   }
   else if(req.body.REQType=='newMember'){
-    console.log(req.body)
+    //console.log(req.body)
     requestQuery = 'INSERT INTO Group_Member (Group_ID,Device_ID) VALUES(' + req.body.Group_ID +',' + req.body.Device_ID +');'
   }
   if(requestQuery!=''){
     await executeQuery(requestQuery)
   }
-  res.redirect('/groups')
+  res.redirect('/groups')}
 })
 
 app.get('/devicesStatus',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let getQuery = 'SELECT Status_ON_OFF,Device_Name,Room_Name,Type_Name,IP_Address FROM Device_Detailed; SELECT * FROM Currently_Running;'
   var results = await executeQuery(getQuery)
   var responseData = {
@@ -357,21 +398,30 @@ app.get('/devicesStatus',async function(req,res){
       responseData.inactive.push(element)
     }
   })
-  res.render('devicesStatus.ejs',{date: new Date(),devices: responseData,session: req.session})
+  res.render('devicesStatus.ejs',{date: new Date(),devices: responseData,session: req.session})}
 })
 
 app.get('/history',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let getQuery='SELECT * FROM History'
   var events = await executeQuery(getQuery)
-  console.log(events)
-  res.render('history.ejs',{date: new Date(),session: req.session,events: events})
+  //console.log(events)
+  res.render('history.ejs',{date: new Date(),session: req.session,events: events})}
 })
 
 app.get('/changePass',async function(req,res){
-  res.render('changePass.ejs',{session:req.session,success:false})
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
+  res.render('changePass.ejs',{session:req.session,success:false})}
 })
 
 app.post('/changePass',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let confirmQuery = 'SELECT User_Name,Password FROM User WHERE Password = "' + req.body.oldPass + '" AND User_Name = "' + req.session.username + '";'
   let credentials = await executeQuery(confirmQuery)
   let changeSuccess = 'fail';
@@ -380,43 +430,70 @@ app.post('/changePass',async function(req,res){
     await executeQuery(changePassQuery)
     changeSuccess=true;
   }
-  res.render('changePass.ejs',{session:req.session,success: changeSuccess})
+  res.render('changePass.ejs',{session:req.session,success: changeSuccess})}
 })
 
 app.get('/users',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   var getQuery='SELECT * FROM User'
   var users = await executeQuery(getQuery)
-  res.render('users.ejs',{session: req.session,users: users})
+  res.render('users.ejs',{session: req.session,users: users})}
 })
 
 app.post('/removeUser',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  } else{
   let removeQuery = 'DELETE FROM User WHERE User_ID=' + req.body.User_ID +';'
   await executeQuery(removeQuery)
-  res.end()
+  res.end()}
 })
 
 app.post('/users', async function(req,res){
-  console.log('DODAJE USERA ' + req.body.User_Name)
-  res.end()
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
+  else{
+  let insertQuery='INSERT INTO User(User_Name,Password,Authorization_Level,Phone_Number) VALUES ("'+req.body.User_Name+'","'+
+    req.body.Password+'",'+req.body.Authorization_Level+',"'+req.body.Phone_Number+'");'
+    await executeQuery(insertQuery)
+    res.redirect('/users')}
 })
 
 app.post('/changeUserPrivilege',async function(req,res){
-  console.log('Zmieniam uprawnienia usera ' + req.body.User_ID + ' na ' + req.body.Authorization_Level)
-  res.end()
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
+  else{
+  let updateQuery = 'UPDATE User SET Authorization_Level=' + req.body.Authorization_Level +' WHERE User_ID=' + req.body.User_ID + ';'
+  await executeQuery(updateQuery)
+  res.redirect('/users')}
 })
 
 
 app.get('/deviceStats',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
+  else{
   let getQuery = 'SELECT * FROM Device_Stats WHERE Device_Name="' + req.query.Device_Name +'";'
   var statistics = await executeQuery(getQuery)
-  console.log(statistics[0])
+  //console.log(statistics[0])
   res.render('deviceStats.ejs',{session: req.session,stats: statistics[0]})
+  }
 })
 
 app.get('/factoryTasks',async function(req,res){
+  if(req.session.loggedin!=true){
+    res.redirect('/login')
+  }
+  else{
   let getQuery='SELECT t.Task_Name,d.Type_Name FROM Task t LEFT JOIN Type d ON (t.Type_ID=d.Type_ID) ORDER BY d.Type_Name,t.Task_Name;'
   var tasks = await executeQuery(getQuery)
   res.render('factoryTasks.ejs',{session: req.session, tasks: tasks})
+  }
 })
 
 

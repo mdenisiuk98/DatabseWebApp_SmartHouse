@@ -14,14 +14,11 @@
                 <%idCounter+=1%>
                 <%const idPass=idCounter%>
                 <li id='<%='script_'+idPass%>'>
-                    <div class='scriptListElement'>
-                        <%=element.User_Name%>
-                    </div>
                     <div class='scriptListElement nameDiv'>
-                        <%=element.Script_Name%>
+                      <%=element.Script_Name%>
                     </div>
                     <div class='scriptListElement privilegeDiv'>
-                        <%=element.Authorization_Level%>
+                        Wymagane uprawnienia:  <%=element.Authorization_Level%>
                     </div>
                     <div class='scriptListElement'>
                         <div class='hiddenElement scriptCodeWrapper'>
@@ -39,7 +36,7 @@
                 <form name='newScript' action='addScript' method='POST'>
                     Nazwa:<input type='text' name='Script_Name' placeholder='Nowy skrypt'>
                     <br>Wymagany poziom uprawnien do uzycia:<input type='number' name='Authorization_Level' min='1' max='<%=session.userPrivilege%>' required value='1'>
-                    <br>Skrypt:<input type='text' name='Code' placeholder='Tutaj wpisz kod nowego skryptu'>
+                    <br>Skrypt:<input type='text' class='scriptCode' name='Code' placeholder='Tutaj wpisz kod nowego skryptu'>
                     <br><button type='submit' method='POST' action='addCustomScript'>Dodaj</button>
                 </form>
             </li>
